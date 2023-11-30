@@ -24,6 +24,9 @@ class User extends Authenticatable
         'phone',
         'location',
         'about_me',
+        'idempresa', 
+        'rol', 
+        'url'
     ];
 
     /**
@@ -45,4 +48,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
     
+    public function empresa()
+    {
+        return $this->belongsTo(Empresa::class, 'idempresa');
+    }
 }

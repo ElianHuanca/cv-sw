@@ -127,7 +127,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link {{ (Request::is('rtl') ? 'active' : '') }}" href="{{ url('rtl') }}">
+        <a class="nav-link {{ (Request::is('trabajos') ? 'active' : '') }}" href="{{ route('trabajos.index') }}">
           <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
             <svg width="12px" height="12px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
               <title>settings</title>
@@ -144,7 +144,7 @@
               </g>
             </svg>
           </div>
-          <span class="nav-link-text ms-1">RTL</span>
+          <span class="nav-link-text ms-1">Trabajos</span>
         </a>
       </li>
       <li class="nav-item mt-3">
@@ -219,7 +219,7 @@
       </li>
     </ul>
   </div>
-  <div class="sidenav-footer mx-3 ">
+  {{-- <div class="sidenav-footer mx-3 ">
     <div class="card card-background shadow-none card-background-mask-secondary" id="sidenavCard">
       <div class="full-background" style="background-image: url('../assets/img/curved-images/white-curved.jpeg')"></div>
       <div class="card-body text-start p-3 w-100">
@@ -233,5 +233,5 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> --}}
 </aside>

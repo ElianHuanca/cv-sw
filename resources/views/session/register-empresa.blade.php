@@ -54,21 +54,21 @@
                         <div class="row px-xl-5 px-sm-4 px-3">
                             <div class="col-3 ms-auto px-1">
                                 <label class="btn btn-outline-light w-120">
-                                    <input type="radio" name="icon" value="store">
+                                    <input type="radio" name="tipo" value="Pequena">
                                     <i class="fas fa-store fa-3x"></i>
                                     <span class="price">$10</span>
                                 </label>
                             </div>
                             <div class="col-3 px-1">
                                 <label class="btn btn-outline-light w-120">
-                                    <input type="radio" name="icon" value="building">
+                                    <input type="radio" name="tipo" value="Mediana">
                                     <i class="fas fa-building fa-3x"></i>
                                     <span class="price">$25</span>
                                 </label>
                             </div>
                             <div class="col-3 me-auto px-1">
                                 <label class="btn btn-outline-light w-120">
-                                    <input type="radio" name="icon" value="industry">
+                                    <input type="radio" name="tipo" value="Grande">
                                     <i class="fas fa-industry fa-3x"></i>
                                     <span class="price">$50</span>
                                 </label>
@@ -80,6 +80,14 @@
                         <div class="card-body">
                             <form role="form text-left" method="POST" action="/register">
                                 @csrf
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" placeholder="Razon Social" name="razon"
+                                        id="razon" aria-label="Razon" aria-describedby="razon"
+                                        value="{{ old('razon social') }}">
+                                    @error('razon')
+                                        <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                    @enderror
+                                </div>
                                 <div class="mb-3">
                                     <input type="text" class="form-control" placeholder="Name" name="name"
                                         id="name" aria-label="Name" aria-describedby="name"
@@ -115,6 +123,7 @@
                                             register again.</p>
                                     @enderror
                                 </div>
+                                
                                 <div class="text-center">
                                     <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2">Sign up</button>
                                 </div>
@@ -129,4 +138,5 @@
             </div>
         </div>
     </section>
+    
 @endsection
