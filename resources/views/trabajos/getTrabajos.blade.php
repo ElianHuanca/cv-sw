@@ -1,9 +1,6 @@
 @extends('layouts.user_type.auth')
-
 @section('content')
-    <div class="row">
-        <div class="col-12">
-            <div class="card mb-4 mx-4">
+<div class="card mb-4 mx-4">
                 <div class="card-header pb-0">
                     <div class="d-flex flex-row justify-content-between">
                         <div>
@@ -116,17 +113,17 @@
                                         </td>
                                         <td class="text-center d-flex justify-content-center">
                                             
-                                            <a href="{{ route('trabajos.edit', $trabajo->id) }}" class="mx-3"
-                                                data-bs-toggle="tooltip" data-bs-original-title="Editar médico">
-                                                <i class="fas fa-user-edit text-secondary"></i>
-                                            </a>
+                                        <a href="{{ route('showPostulaciones', $trabajo->id) }}" class="mx-3" data-bs-toggle="tooltip" data-bs-original-title="Postulaciones">
+                                            <i class="fas fa-user-edit text-secondary"></i>
+                                        </a>
+
                                             
-                                            <form action="{{ route('trabajos.destroy', $trabajo->id) }}" method="POST"
-                                                onsubmit="return confirm('¿Estás seguro de que deseas eliminar este médico?')">
+                                            <form action="{{ route('eliminarEmpresa', $trabajo->id) }}" method="POST"
+                                                onsubmit="return confirm('¿Estás seguro de que deseas eliminar este este trabajo?')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <i class="cursor-pointer fas fa-trash text-secondary"
-                                                    data-bs-toggle="tooltip" data-bs-original-title="Eliminar médico"
+                                                    data-bs-toggle="tooltip" data-bs-original-title="Eliminar Trabajo"
                                                     onclick="this.closest('form').submit(); return false;"></i>
                                             </form>
                                         </td>
@@ -137,9 +134,4 @@
                     </div>
                 </div>
             </div>
-             <div class="mt-3 d-flex justify-content-center">
-                {{ $trabajos->links() }}
-            </div> 
-        </div>
-    </div>
 @endsection

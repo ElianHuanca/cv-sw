@@ -3,6 +3,7 @@
 use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InfoUserController;
+use App\Http\Controllers\PostulacionesController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ResetController;
 use App\Http\Controllers\SessionsController;
@@ -72,9 +73,21 @@ Route::group(['middleware' => 'auth'], function () {
 
 	Route::resource('users', UsersController::class)->names('users');
 	Route::resource('trabajos', TrabajosController::class)->names('trabajos');
+	Route::get('showEmpresas', [TrabajosController::class, 'showEmpresas'])->name('showEmpresas');
+	Route::delete('eliminarEmpresa/{id}', [TrabajosController::class, 'eliminarEmpresa'])->name('eliminarEmpresa');
+
+
+	Route::get('showPostulacion/{id}', [PostulacionesController::class, 'showPostulaciones'])->name('showPostulaciones');
+
+
+
+
+
+
+
+
+
 });
-
-
 
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/register', [RegisterController::class, 'create']);
@@ -93,3 +106,5 @@ Route::group(['middleware' => 'guest'], function () {
 Route::get('/login', function () {
     return view('session/login-session');
 })->name('login');
+
+
