@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Sucursales;
 use App\Models\Trabajos;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class TrabajosController extends Controller
@@ -116,5 +118,19 @@ class TrabajosController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+    public function showEmpresas(){
+      
+        $id=Auth::user()->id;
+        $user=User::where('id', $id)->first();
+        $trabajos = Trabajos::where('id', $user->idempresa)->get();
+       
+        return view('trabajos.getTrabajos', compact('trabajos'));
+    }
+    public function EliminarEmpresa($idempresa){
+        $trabajo = Trabajos::where('id', $idempresa)->first();
+        $trabajo->estado=false;
+        $trabajo->save();
+        return redirect()->route('trabajos.index')->with('success', 'Trabajo eliminado correctamente');
     }
 }

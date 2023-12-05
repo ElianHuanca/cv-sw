@@ -95,6 +95,10 @@
                     <p class="text-danger text-xs mt-2">First, agree to the Terms and Conditions, then try register again.</p>
                   @enderror
                 </div>
+                <div class="form-check form-check-info text-left">
+                  <input class="form-check-input" type="file" name="file" id="file">
+                 Seleccionar Carpeta
+                </div>
                 <div class="text-center">
                   <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2">Sign up</button>
                 </div>
