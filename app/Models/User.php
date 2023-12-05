@@ -26,7 +26,9 @@ class User extends Authenticatable
         'about_me',
         'idempresa', 
         'rol', 
-        'url'
+        'url',
+        'pathcv',
+        'textcv'
     ];
 
     /**

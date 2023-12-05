@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
 use Aws\Textract\TextractClient;
+use Illuminate\Support\Facades\Storage;
 
 class RegisterController extends Controller
 {
@@ -19,23 +20,20 @@ class RegisterController extends Controller
 
     public function store(Request $request)
     {
-       
+
         $attributes = request()->validate([
             'name' => ['required', 'max:50'],
             'email' => ['required', 'email', 'max:50', Rule::unique('users', 'email')],
             'password' => ['required', 'min:5', 'max:20'],
             'agreement' => ['accepted']
         ]);
-        $attributes['password'] = bcrypt($attributes['password'] );
+        $attributes['password'] = bcrypt($attributes['password']);
+        $attributes['rol'] = 'Postulante';
 
-        $s3 = new S3Client([
-            'version' => 'latest',
-            'region' => env('AWS_DEFAULT_REGION'),
-            'credentials' => [
-                'key' => env('AWS_ACCESS_KEY_ID'),
-                'secret' => env('AWS_SECRET_ACCESS_KEY'),
-            ],
-        ]);
+        $path = $request->file('file')->store('cv', 's3');
+        $attributes['url'] = Storage::disk('s3')->url($path);
+        $attributes['pathcv'] = $path;
+
         $textract = new TextractClient([
             'version' => 'latest',
             'region' => env('AWS_DEFAULT_REGION'),
@@ -44,46 +42,27 @@ class RegisterController extends Controller
                 'secret' => env('AWS_SECRET_ACCESS_KEY'),
             ],
         ]);
- 
-        $s3->putObject([
-            'Bucket' => env('AWS_BUCKET'),
-            'Key' => $request->file,
-            'Body' => $request->file,
-            'ACL' => 'public-read', 
-        ]);
-        $result = $textract->startDocumentTextDetection([
-            'DocumentLocation' => [
+
+        $result = $textract->detectDocumentText([
+            'Document' => [
                 'S3Object' => [
                     'Bucket' => env('AWS_BUCKET'),
-                    'Name' => $request->file,
+                    'Name' =>$attributes['pathcv'], 
                 ],
             ],
-        ]);
-        // $jobId = $result['JobId'];
-
-        // $textract->waitUntil('DocumentTextDetectionComplete', [
-        //     'JobId' => $jobId,
-        // ]);
-    
-        // // Obtener los resultados
-        // $response = $textract->getDocumentTextDetection([
-        //     'JobId' => $jobId,
-        // ]);
-
-        // $textExtracted = '';
-
-        // foreach ($response['Blocks'] as $block) {
-        //     if ($block['BlockType'] == 'LINE') {
-        //         $textExtracted .= $block['Text'] . "\n";
-        //     }
-        // }
-        
-        // dd($textExtracted);
-
+        ]);        
+        $blocks = $result['Blocks'];
+        $text = '';
+        foreach ($blocks as $key => $value) {
+            if ($value['BlockType'] == 'LINE' || $value['BlockType'] == 'WORD') {
+                $text .= $value['Text'] . "\n";
+            }
+        }
+        $attributes['textcv'] = $text;
 
         session()->flash('success', 'Your account has been created.');
         $user = User::create($attributes);
-        Auth::login($user); 
+        Auth::login($user);
         return redirect('/dashboard');
     }
 
@@ -100,14 +79,13 @@ class RegisterController extends Controller
             'password' => ['required', 'min:5', 'max:20'],
             'agreement' => ['accepted']
         ]);
-        $attributes['password'] = bcrypt($attributes['password'] );
+        $attributes['password'] = bcrypt($attributes['password']);
 
-        
+
 
         session()->flash('success', 'Your account has been created.');
         $user = User::create($attributes);
-        Auth::login($user); 
+        Auth::login($user);
         return redirect('/dashboard');
     }
-
 }
