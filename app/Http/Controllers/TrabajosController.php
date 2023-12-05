@@ -14,8 +14,10 @@ class TrabajosController extends Controller
      */
     public function index()
     {
-        $trabajos = Trabajos::where('estado', true)->get(); //->paginate(10);
-        dd($trabajos);
+        //$user = auth()->user();
+        $trabajos = Trabajos::where('estado', true)->paginate(10);
+        //$trabajo = Trabajos::where('id', 7)->first();
+        //dd($trabajo);
         return view('trabajos.index', compact('trabajos'));
     }
 
@@ -46,42 +48,41 @@ class TrabajosController extends Controller
         ]);
         //dd($request->all());
         $user = auth()->user();
-
         
-        $cadenaResponsabilidades = "'" . str_replace("\n", "', '", $request->responsabilidades) . "'";
-        $cadenaRequisitos = "'" . str_replace("\n", "', '", $request->requisitos) . "'";
+        
+        /* $responsabilidades = "'".str_replace(["\n"], "','" ,$request->responsabilidades)."'";
+        $responsabilidades = [str_replace(["\r"], '', $responsabilidades)]; */
 
 
-        // Inserta el array en la base de datos
-        DB::insert(`INSERT INTO trabajos (cargo,
-        responsabilidades,
-        requisitos,
-        salario,
-        vacancia,
-        fechafin,
-        idempresa,
-        idsucursal) VALUES ('$request->cargo', 
-        ARRAY[$cadenaResponsabilidades], 
-        ARRAY[$cadenaRequisitos],
-        '$request->salario',
-        '$request->vacancia',
-        '$request->fechafin',
-        '$user->idempresa',
-        '$request->idsucursal'
-        )`);
+        //$responsabilidades = explode("\n", str_replace(["\r"], "", $request->responsabilidades));
+        //dd($responsabilidades);
+        //$responsabilidades = array_filter($responsabilidades, 'strlen');
+        //$responsabilidades = array_values($responsabilidades);
+        
+        $requisitos = explode("\n", str_replace(["\r"], "", $request->requisitos));
+        //$requisitos = array_filter($requisitos, 'strlen');
 
-
-
-        /* Trabajos::create([
+        // Inserta el array en la base de datos        
+        $responsabilidades = ['Desarrollo y mantenimiento de aplicaciones', 'Conocimiento de varios lenguajes de programación'];
+        //dd($responsabilidades);
+        DB::table('trabajos')->insert([
             'cargo' => $request->cargo,
-            'responsabilidades' => $pgArrayResponsabilidades,
-            'requisitos' => $pgArrayRequisitos,
+            'responsabilidades' => DB::raw('ARRAY[' . implode(',', array_map(function ($item) {
+                return "'" . addslashes($item) . "'";
+            }, $responsabilidades)) . ']'),            
+            'requisitos' => DB::raw('ARRAY[' . implode(',', array_map(function ($item) {
+                return "'" . addslashes($item) . "'";
+            }, $requisitos)) . ']'),
             'salario' => $request->salario,
             'vacancia' => $request->vacancia,
             'fechafin' => $request->fechafin,
+            //'categoria' => $request->categoria,
             'idempresa' => $user->idempresa,
             'idsucursal' => $request->idsucursal,
-        ]); */
+        ]);
+
+
+
         return redirect()->route('trabajos.index')->with('success', 'Trabajo creado correctamente');
     }
 

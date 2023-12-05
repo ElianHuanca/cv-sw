@@ -12,6 +12,11 @@ class Trabajos extends Model
     protected $table = 'trabajos';
     protected $fillable = ['cargo', 'responsabilidades', 'requisitos', 'salario', 'vacancia', 'fecha', 'fechafin', 'idempresa', 'idsucursal'];
     public $timestamps = false;
+
+    protected $casts = [
+        'responsabilidades' => 'array',
+        'requisitos' => 'array',
+    ];
     public function empresa()
     {
         return $this->belongsTo(Empresas::class, 'idempresa');

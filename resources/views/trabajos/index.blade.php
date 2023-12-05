@@ -137,9 +137,9 @@
                     </div>
                 </div>
             </div>
-            {{-- <div class="mt-3 d-flex justify-content-center">
+            <div class="mt-3 d-flex justify-content-center">
                 {{ $trabajos->links('vendor.pagination.bootstrap-4') }}
-            </div> --}}
+            </div>
         </div>
     </div>
 @endsection

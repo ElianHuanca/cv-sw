@@ -1,3 +1,9 @@
+<style>
+  .nav-link.active {
+      background-color: #2222; /* Reemplaza con tu color preferido en formato hexadecimal o nombre de color */
+      color: #fff; /* Cambia el color del texto según tus preferencias */
+  }
+</style>
 
 <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 " id="sidenav-main">
   <div class="sidenav-header">
@@ -51,7 +57,7 @@
                     </g>
                 </svg>
             </div>
-            <span class="nav-link-text ms-1">User Profile</span>
+            <span class="nav-link-text ms-1">Perfil De Usuario</span>
         </a>
       </li>
       <li class="nav-item pb-2">
