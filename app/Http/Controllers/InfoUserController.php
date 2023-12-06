@@ -13,7 +13,10 @@ class InfoUserController extends Controller
 
     public function create()
     {
-        return view('laravel-examples/user-profile');
+        $id=Auth::user()->id;
+        $user = User::find($id);
+        $rol=$user->rol;
+        return view('laravel-examples/user-profile', compact('rol'));
     }
 
     public function store(Request $request)

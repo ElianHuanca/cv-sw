@@ -99,9 +99,11 @@
     </div> --}}
     <div class="container-fluid py-4">
         <div class="card">
-            <div class="card-header pb-0 px-3">
-                <h6 class="mb-0">{{ __('Profile Information') }}</h6>
-            </div>
+        <div class="card-header pb-0 px-3">
+            <h6 class="mb-0">Información Del Perfil
+             
+            </h6>
+        </div>
             <div class="card-body pt-4 p-3">
                 <form action="/user-profile" method="POST" role="form text-left">
                     @csrf
@@ -164,6 +166,14 @@
                                 <label for="user.location" class="form-control-label">{{ __('Location') }}</label>
                                 <div class="@error('user.location') border border-danger rounded-3 @enderror">
                                     <input class="form-control" type="text" placeholder="Location" id="name" name="location" value="{{ auth()->user()->location }}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="user.location" class="form-control-label">Rol</label>
+                                <div class="@error('user.location') border border-danger rounded-3 @enderror">
+                                <input class="form-control" type="text" placeholder="{{ $rol }}" id="name" name="location" value="{{ $rol }}" readonly>
                                 </div>
                             </div>
                         </div>
