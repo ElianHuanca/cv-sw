@@ -12,7 +12,6 @@
                         {{-- Puedes ajustar la URL según tus necesidades --}}
                         <a href="{{ route('trabajos.create') }}" class="btn bg-gradient-primary btn-sm mb-0"
                             type="button">+&nbsp; Nuevo Trabajo</a>
-
                     </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
@@ -70,11 +69,9 @@
                                         <td class="text-center">
                                             @php
                                                 $responsabilidades = $trabajo->responsabilidades;
-
                                                 // Reemplazar llaves por corchetes
                                                 $responsabilidades = str_replace('{', '[', $responsabilidades);
                                                 $responsabilidades = str_replace('}', ']', $responsabilidades);
-
                                                 // Decodificar la cadena JSON
                                                 $responsabilidades = json_decode($responsabilidades);
                                                 //dd($responsabilidades);
@@ -114,13 +111,11 @@
                                         <td class="text-center">
                                             <p class="text-xs font-weight-bold mb-0">{{ $trabajo->fechafin }}</p>
                                         </td>
-                                        <td class="text-center d-flex justify-content-center">
-                                            
+                                        <td class="text-center d-flex justify-content-center">                                            
                                             <a href="{{ route('trabajos.edit', $trabajo->id) }}" class="mx-3"
                                                 data-bs-toggle="tooltip" data-bs-original-title="Editar médico">
                                                 <i class="fas fa-user-edit text-secondary"></i>
-                                            </a>
-                                            
+                                            </a>                                            
                                             <form action="{{ route('trabajos.destroy', $trabajo->id) }}" method="POST"
                                                 onsubmit="return confirm('¿Estás seguro de que deseas eliminar este médico?')">
                                                 @csrf
