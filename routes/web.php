@@ -75,10 +75,15 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('trabajos', TrabajosController::class)->names('trabajos');
 	Route::get('showEmpresas', [TrabajosController::class, 'showEmpresas'])->name('showEmpresas');
 	Route::delete('eliminarEmpresa/{id}', [TrabajosController::class, 'eliminarEmpresa'])->name('eliminarEmpresa');
+	Route::get('gestionarUsuarios', [UsersController::class, 'gestionUsuarios'])->name('gestionarUsuarios');
+	Route::get('agregarPersonal', [UsersController::class, 'agregarPersonal'])->name('agregarPersonal');
+	Route::post('registrarPersonalDirecto', [UsersController::class, 'store'])->name('registrarPersonalDirecto');
+
+
 
 
 	Route::get('showPostulacion/{id}', [PostulacionesController::class, 'showPostulaciones'])->name('showPostulaciones');
-
+	Route::post('registrarPersonal', [PostulacionesController::class, 'registrarPersonal'])->name('registrarPersonal');
 
 
 
