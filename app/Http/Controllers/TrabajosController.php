@@ -16,11 +16,18 @@ class TrabajosController extends Controller
      */
     public function index()
     {
-        //$user = auth()->user();
-        $trabajos = Trabajos::where('estado', true)->paginate(10);
-        //$trabajo = Trabajos::where('id', 7)->first();
-        //dd($trabajo);
-        return view('trabajos.index', compact('trabajos'));
+        $usuario = Auth::user();
+        if ($usuario->rol == 'Postulante') {
+            $trabajos = Trabajos::where('estado', true)
+                ->whereNotIn('id', function ($query) {
+                    $query->select('idtrabajo')->from('postulaciones');
+                })
+                ->paginate(10);
+            return view('trabajos.index', compact('trabajos'));
+        } else {
+            $trabajos = Trabajos::where('estado', true)->paginate(10);
+            return view('trabajos.index', compact('trabajos'));
+        }
     }
 
     /**
@@ -47,38 +54,28 @@ class TrabajosController extends Controller
             'vacancia' => 'required',
             'fechafin' => 'required',
             'idsucursal' => 'required',
+            'categoria' => 'required'
         ]);
-        //dd($request->all());
         $user = auth()->user();
-        
-        
-        /* $responsabilidades = "'".str_replace(["\n"], "','" ,$request->responsabilidades)."'";
-        $responsabilidades = [str_replace(["\r"], '', $responsabilidades)]; */
-
-
-        //$responsabilidades = explode("\n", str_replace(["\r"], "", $request->responsabilidades));
-        //dd($responsabilidades);
-        //$responsabilidades = array_filter($responsabilidades, 'strlen');
-        //$responsabilidades = array_values($responsabilidades);
-        
+        $responsabilidades = explode("\n", str_replace(["\r"], "", $request->responsabilidades));
         $requisitos = explode("\n", str_replace(["\r"], "", $request->requisitos));
         //$requisitos = array_filter($requisitos, 'strlen');
 
         // Inserta el array en la base de datos        
-        $responsabilidades = ['Desarrollo y mantenimiento de aplicaciones', 'Conocimiento de varios lenguajes de programación'];
+        //$responsabilidades = ['Desarrollo y mantenimiento de aplicaciones', 'Conocimiento de varios lenguajes de programación'];
         //dd($responsabilidades);
         DB::table('trabajos')->insert([
             'cargo' => $request->cargo,
             'responsabilidades' => DB::raw('ARRAY[' . implode(',', array_map(function ($item) {
                 return "'" . addslashes($item) . "'";
-            }, $responsabilidades)) . ']'),            
+            }, $responsabilidades)) . ']'),
             'requisitos' => DB::raw('ARRAY[' . implode(',', array_map(function ($item) {
                 return "'" . addslashes($item) . "'";
             }, $requisitos)) . ']'),
             'salario' => $request->salario,
             'vacancia' => $request->vacancia,
             'fechafin' => $request->fechafin,
-            //'categoria' => $request->categoria,
+            'categoria' => $request->categoria,
             'idempresa' => $user->idempresa,
             'idsucursal' => $request->idsucursal,
         ]);
@@ -93,7 +90,8 @@ class TrabajosController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $trabajo = Trabajos::where('id', $id)->first();
+        return view('trabajos.show', compact('trabajo'));
     }
 
     /**
@@ -119,17 +117,16 @@ class TrabajosController extends Controller
     {
         //
     }
-    public function showEmpresas(){
-      
-        $id=Auth::user()->id;
-        $user=User::where('id', $id)->first();
-        $trabajos = Trabajos::where('id', $user->idempresa)->get();
-    
+    public function showEmpresas()
+    {
+        $user = Auth::user();
+        $trabajos = Trabajos::where('idempresa', $user->idempresa)->paginate(10);
         return view('trabajos.getTrabajos', compact('trabajos'));
     }
-    public function EliminarEmpresa($idempresa){
+    public function EliminarEmpresa($idempresa)
+    {
         $trabajo = Trabajos::where('id', $idempresa)->first();
-        $trabajo->estado=false;
+        $trabajo->estado = false;
         $trabajo->save();
         return redirect()->route('trabajos.index')->with('success', 'Trabajo eliminado correctamente');
     }

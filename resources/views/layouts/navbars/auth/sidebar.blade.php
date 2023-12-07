@@ -20,6 +20,7 @@
     <hr class="horizontal dark mt-0">
     <div class="collapse navbar-collapse  w-auto" id="sidenav-collapse-main">
         <ul class="navbar-nav">
+            @if (Auth::user()->rol === 'Personal')
             <li class="nav-item">
                 <a class="nav-link {{ Request::is('dashboard') ? 'active' : '' }}" href="{{ url('dashboard') }}">
                     <div
@@ -46,8 +47,9 @@
                     <span class="nav-link-text ms-1">Dashboard</span>
                 </a>
             </li>
+            @endif
             <li class="nav-item mt-2">
-                <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Laravel Examples</h6>
+                <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Acciones De Usuario</h6>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ Request::is('user-profile') ? 'active' : '' }} "
@@ -152,19 +154,19 @@
 
             @if (Auth::user()->rol === 'Postulante')
                 <li class="nav-item pb-2">
-                    <a class="nav-link {{ Request::is('user-management') ? 'active' : '' }}"
-                        href="{{ url('user-management') }}">
+                    <a class="nav-link {{ Request::is('postulaciones.index') ? 'active' : '' }}"
+                        href="{{ route('postulaciones.index') }}">
                         <div
                             class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <i style="font-size: 1rem;"
-                                class="fas fa-lg fa-list-ul ps-2 pe-2 text-center text-dark {{ Request::is('user-management') ? 'text-white' : 'text-dark' }} "
+                                class="fas fa-lg fa-list-ul ps-2 pe-2 text-center text-dark {{ Request::is('postulaciones.index') ? 'text-white' : 'text-dark' }} "
                                 aria-hidden="true"></i>
                         </div>
                         <span class="nav-link-text ms-1">Mis Postulaciones</span>
                     </a>
                 </li>
             @endif
-            <li class="nav-item mt-2">
+            {{-- <li class="nav-item mt-2">
                 <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Example pages</h6>
             </li>
             <li class="nav-item">
@@ -251,7 +253,7 @@
                     </div>
                     <span class="nav-link-text ms-1">Virtual Reality</span>
                 </a>
-            </li>
+            </li> --}}
             <li class="nav-item">
                 <a class="nav-link {{ Request::is('trabajos') ? 'active' : '' }}"
                     href="{{ route('trabajos.index') }}">
@@ -283,7 +285,7 @@
                     <span class="nav-link-text ms-1">Trabajos</span>
                 </a>
             </li>
-            <li class="nav-item mt-3">
+            {{-- <li class="nav-item mt-3">
                 <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>
             </li>
             <li class="nav-item">
@@ -381,7 +383,7 @@
                     class="btn btn-primary btn-md active px-5 text-white" target="_blank" role="button"
                     aria-pressed="true">
                     Upgrade to PRO</a>
-            </li>
+            </li> --}}
         </ul>
     </div>
     {{-- <div class="sidenav-footer mx-3 ">

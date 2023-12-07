@@ -10,13 +10,13 @@ class Trabajos extends Model
     use HasFactory;
 
     protected $table = 'trabajos';
-    protected $fillable = ['cargo', 'responsabilidades', 'requisitos', 'salario', 'vacancia', 'fecha', 'fechafin', 'idempresa', 'idsucursal'];
+    protected $fillable = ['cargo', 'responsabilidades', 'requisitos', 'salario', 'vacancia', 'fecha', 'fechafin', 'categoria','idempresa', 'idsucursal'];
     public $timestamps = false;
 
-    protected $casts = [
+    /* rotected $casts = [
         'responsabilidades' => 'array',
         'requisitos' => 'array',
-    ];
+    ]; */
     public function empresa()
     {
         return $this->belongsTo(Empresas::class, 'idempresa');

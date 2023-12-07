@@ -10,8 +10,8 @@
                             <h5 class="mb-0">Lista de Trabajos</h5>
                         </div>
                         {{-- Puedes ajustar la URL según tus necesidades --}}
-                        <a href="{{ route('trabajos.create') }}" class="btn bg-gradient-primary btn-sm mb-0"
-                            type="button">+&nbsp; Nuevo Trabajo</a>
+                        {{-- <a href="{{ route('trabajos.create') }}" class="btn bg-gradient-primary btn-sm mb-0"
+                            type="button">+&nbsp; Nuevo Trabajo</a> --}}
                     </div>
                 </div>
                 <div class="card-body px-0 pt-0 pb-2">
@@ -63,40 +63,51 @@
                                         <td class="text-center">
                                             <p class="text-xs font-weight-bold mb-0">{{ $trabajo->empresa->razon }}</p>
                                         </td>
-
+                                        <td class="text-center">
+                                            <p class="text-xs font-weight-bold mb-0">{{ $trabajo->sucursal->direccion }} -
+                                                {{ $trabajo->sucursal->ciudad }}</p>
+                                        </td>
                                         <td class="text-center">
                                             <p class="text-xs font-weight-bold mb-0">{{ $trabajo->cargo }}</p>
                                         </td>
                                         <td class="text-center">
                                             @php
                                                 $responsabilidades = $trabajo->responsabilidades;
+                                                // Reemplazar llaves por corchetes
 
-                                                // Decodificar la cadena JSON solo si no es nulo y es una cadena JSON válida
-                                                $responsabilidades = !is_null($responsabilidades) && json_decode($responsabilidades) ? json_decode($responsabilidades) : [];
+                                                $responsabilidades = str_replace('{', '[', $responsabilidades);
+                                                $responsabilidades = str_replace('}', ']', $responsabilidades);
+                                                // Decodificar la cadena JSON
+                                                $responsabilidades = json_decode($responsabilidades);
 
-                                                // Verificar si $responsabilidades es un array y tiene elementos
-                                                if (is_array($responsabilidades) && count($responsabilidades) > 0) {
-                                                    echo '<p class="text-xs font-weight-bold mb-0">' . $responsabilidades[0] . '</p>';
-                                                } else {
-                                                    echo '<p class="text-xs font-weight-bold mb-0">No hay datos disponibles</p>';
-                                                }
                                             @endphp
+                                            {{-- <ul>
+                                                @foreach ($responsabilidades as $responsabilidad)
+                                                    <li class="text-xs font-weight-bold mb-0">{{ $responsabilidad }}</li>
+                                                @endforeach
+                                            </ul> --}}
+
+                                            <p class="text-xs font-weight-bold mb-0">{{ $responsabilidades[0] }}</p>
                                         </td>
 
                                         <td class="text-center">
                                             @php
                                                 $requisitos = $trabajo->requisitos;
+                                                // Reemplazar llaves por corchetes
 
-                                                // Decodificar la cadena JSON solo si no es nulo y es una cadena JSON válida
-                                                $requisitos = !is_null($requisitos) && json_decode($requisitos) ? json_decode($requisitos) : [];
+                                                $requisitos = str_replace('{', '[', $requisitos);
+                                                $requisitos = str_replace('}', ']', $requisitos);
+                                                // Decodificar la cadena JSON
+                                                $requisitos = json_decode($requisitos);
 
-                                                // Verificar si $requisitos es un array y tiene elementos
-                                                if (is_array($requisitos) && count($requisitos) > 0) {
-                                                    echo '<p class="text-xs font-weight-bold mb-0">' . $requisitos[0] . '</p>';
-                                                } else {
-                                                    echo '<p class="text-xs font-weight-bold mb-0">No hay datos disponibles</p>';
-                                                }
                                             @endphp
+                                            {{-- <ul>
+                                                @foreach ($responsabilidades as $responsabilidad)
+                                                    <li class="text-xs font-weight-bold mb-0">{{ $responsabilidad }}</li>
+                                                @endforeach
+                                            </ul> --}}
+
+                                            <p class="text-xs font-weight-bold mb-0">{{ $requisitos[0] }}</p>
                                         </td>
                                         <td class="text-center">
                                             <p class="text-xs font-weight-bold mb-0">{{ $trabajo->salario }}Bs</p>
@@ -108,18 +119,10 @@
                                             <p class="text-xs font-weight-bold mb-0">{{ $trabajo->fechafin }}</p>
                                         </td>
                                         <td class="text-center d-flex justify-content-center">
-                                            <a href="{{ route('trabajos.edit', $trabajo->id) }}" class="mx-3"
-                                                data-bs-toggle="tooltip" data-bs-original-title="Editar médico">
+                                            <a href="{{ route('trabajos.show', $trabajo->id) }}" class="mx-3"
+                                                data-bs-toggle="tooltip" data-bs-original-title="Ver Detalle">
                                                 <i class="fas fa-user-edit text-secondary"></i>
                                             </a>
-                                            <form action="{{ route('trabajos.destroy', $trabajo->id) }}" method="POST"
-                                                onsubmit="return confirm('¿Estás seguro de que deseas eliminar este médico?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <i class="cursor-pointer fas fa-trash text-secondary"
-                                                    data-bs-toggle="tooltip" data-bs-original-title="Eliminar médico"
-                                                    onclick="this.closest('form').submit(); return false;"></i>
-                                            </form>
                                         </td>
                                     </tr>
                                 @endforeach

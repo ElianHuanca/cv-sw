@@ -3,6 +3,7 @@
 use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmpresasController;
+use App\Http\Controllers\EntrevistasController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InfoUserController;
 use App\Http\Controllers\PersonalController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\SessionsController;
 use App\Http\Controllers\SucursalesController;
 use App\Http\Controllers\TrabajosController;
 use App\Http\Controllers\UsersController;
+use App\Models\Postulaciones;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Route;
@@ -80,6 +82,14 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('trabajos', TrabajosController::class)->names('trabajos');
 	Route::resource('personal', PersonalController::class)->names('personal');
 	Route::resource('sucursales', SucursalesController::class)->names('sucursales');
+	Route::resource('postulaciones', PostulacionesController::class)->names('postulaciones');
+
+	Route::get('/entrevistas', [EntrevistasController::class, 'index'])->name('entrevistas.index');
+	Route::post('/entrevistas', [EntrevistasController::class, 'store'])->name('entrevistas.store');
+	Route::get('/entrevistas/{id}/edit', [EntrevistasController::class, 'edit'])->name('entrevistas.edit');
+	Route::put('/entrevistas/{id}', [EntrevistasController::class, 'update'])->name('entrevistas.update');
+	Route::get('/entrevistas/{idpostulacion}/create', [EntrevistasController::class, 'create'])->name('entrevistas.create');
+
 
 	Route::get('showEmpresas', [TrabajosController::class, 'showEmpresas'])->name('showEmpresas');
 	Route::delete('eliminarEmpresa/{id}', [TrabajosController::class, 'eliminarEmpresa'])->name('eliminarEmpresa');

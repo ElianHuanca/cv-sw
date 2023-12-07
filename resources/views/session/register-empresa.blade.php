@@ -50,35 +50,35 @@
                         <div class="card-header text-center pt-4">
                             <h5>Register</h5>
                         </div>
+                        <form role="form text-left" method="POST" action="/register-empresa">
+                            <div class="row px-xl-5 px-sm-4 px-3">
+                                <div class="col-3 ms-auto px-1">
+                                    <label class="btn btn-outline-light w-120">
+                                        <input type="radio" name="tipo" value="Pequena">
+                                        <i class="fas fa-store fa-3x"></i>
+                                        <span class="price">$10</span>
+                                    </label>
+                                </div>
+                                <div class="col-3 px-1">
+                                    <label class="btn btn-outline-light w-120">
+                                        <input type="radio" name="tipo" value="Mediana">
+                                        <i class="fas fa-building fa-3x"></i>
+                                        <span class="price">$25</span>
+                                    </label>
+                                </div>
+                                <div class="col-3 me-auto px-1">
+                                    <label class="btn btn-outline-light w-120">
+                                        <input type="radio" name="tipo" value="Grande">
+                                        <i class="fas fa-industry fa-3x"></i>
+                                        <span class="price">$50</span>
+                                    </label>
+                                </div>
 
-                        <div class="row px-xl-5 px-sm-4 px-3">
-                            <div class="col-3 ms-auto px-1">
-                                <label class="btn btn-outline-light w-120">
-                                    <input type="radio" name="tipo" value="Pequena">
-                                    <i class="fas fa-store fa-3x"></i>
-                                    <span class="price">$10</span>
-                                </label>
                             </div>
-                            <div class="col-3 px-1">
-                                <label class="btn btn-outline-light w-120">
-                                    <input type="radio" name="tipo" value="Mediana">
-                                    <i class="fas fa-building fa-3x"></i>
-                                    <span class="price">$25</span>
-                                </label>
-                            </div>
-                            <div class="col-3 me-auto px-1">
-                                <label class="btn btn-outline-light w-120">
-                                    <input type="radio" name="tipo" value="Grande">
-                                    <i class="fas fa-industry fa-3x"></i>
-                                    <span class="price">$50</span>
-                                </label>
-                            </div>
-
-                        </div>
 
 
-                        <div class="card-body">
-                            <form role="form text-left" method="POST" action="/register">
+                            <div class="card-body">
+
                                 @csrf
                                 <div class="mb-3">
                                     <input type="text" class="form-control" placeholder="Razon Social" name="razon"
@@ -111,6 +111,12 @@
                                         <p class="text-danger text-xs mt-2">{{ $message }}</p>
                                     @enderror
                                 </div>
+                                <div class="mb-3">
+                                    <label for="numero_tarjeta">Número de Tarjeta de Crédito:</label>
+                                    <input type="text" id="numero_tarjeta" name="numero_tarjeta"
+                                        placeholder="Ingresa el número de tarjeta" class="form-control" autocomplete="off"
+                                        maxlength="16" required>
+                                </div>
                                 <div class="form-check form-check-info text-left">
                                     <input class="form-check-input" type="checkbox" name="agreement" id="flexCheckDefault"
                                         checked>
@@ -123,7 +129,7 @@
                                             register again.</p>
                                     @enderror
                                 </div>
-                                
+
                                 <div class="text-center">
                                     <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2">Sign up</button>
                                 </div>
@@ -131,12 +137,12 @@
                                         class="text-dark font-weight-bolder">Ingresa</a></p>
                                 <p class="text-sm mt-3 mb-0">Already have an account? <a href="login"
                                         class="text-dark font-weight-bolder">Sign in</a></p>
-                            </form>
-                        </div>
+
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    
 @endsection

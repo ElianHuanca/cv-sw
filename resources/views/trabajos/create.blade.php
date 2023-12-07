@@ -19,7 +19,7 @@
                                 <div class="form-group">
                                     <label for="cargo" class="form-control-label">Cargo</label>
                                     <input type="text" class="form-control" id="cargo" name="cargo"
-                                        value="{{ old('cargo') }}" required min="{{ now()->toDateString() }}">
+                                        value="{{ old('cargo') }}" required >
                                     @error('cargo')
                                         <p class="text-danger text-xs mt-2">{{ $message }}</p>
                                     @enderror
@@ -66,7 +66,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
 
                         <div class="row">
                             <div class="col-md-12">
@@ -83,11 +83,26 @@
                                     <label for="idsucursal">Sucursal:</label>
                                     <select name="idsucursal" class="form-control" required>
                                         @foreach ($sucursales as $sucursal)
-                                            <option value="{{ $sucursal->id }}">{{ $sucursal->direccion }}</option>
+                                            <option value="{{ $sucursal->id }}">{{ $sucursal->direccion }} -
+                                                {{ $sucursal->ciudad }}</option>
                                         @endforeach
-                                    </select>                                  
+                                    </select>
                                 </div>
-                            </div>                            
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="categoria">Categoria:</label>
+                                    <select name="categoria" class="form-control" required>
+                                        <option value="" selected disabled>Selecciona una categoría</option>
+                                        <option value="Ingenieria">Ingeniería</option>
+                                        <option value="Tecnologia De La Informacion">Tecnología de la Información</option>
+                                        <option value="Finanzas y Contabilidad">Finanzas y Contabilidad</option>
+                                        <option value="Ventas y Marketing">Ventas y Marketing</option>
+                                        <option value="Manufactura y Produccion">Manufactura y Producción</option>
+                                        <option value="Logistica y Transporte">Logística y Transporte</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="mt-3">

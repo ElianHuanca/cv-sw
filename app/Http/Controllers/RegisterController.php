@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Empresas;
 use App\Models\User;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
@@ -63,7 +64,7 @@ class RegisterController extends Controller
         session()->flash('success', 'Your account has been created.');
         $user = User::create($attributes);
         Auth::login($user);
-        return redirect('/dashboard');
+        return view('laravel-examples/user-profile');//return redirect()->route('user-profile');//redirect('/perfil');
     }
 
     public function createEmpresa()
@@ -71,21 +72,33 @@ class RegisterController extends Controller
         return view('session.register-empresa');
     }
 
-    public function storeEmpresa()
+    public function storeEmpresa(Request $request)
     {
+        //dd($request->all());
         $attributes = request()->validate([
             'name' => ['required', 'max:50'],
             'email' => ['required', 'email', 'max:50', Rule::unique('users', 'email')],
-            'password' => ['required', 'min:5', 'max:20'],
+            'password' => ['required', 'min:5', 'max:20'],            
             'agreement' => ['accepted']
         ]);
         $attributes['password'] = bcrypt($attributes['password']);
 
-
+        Empresas::create([
+            'razon' => $request->razon,
+            'tipo' => 'Grande'
+        ]);
 
         session()->flash('success', 'Your account has been created.');
-        $user = User::create($attributes);
+        $user = User::create(
+            [
+                'name' => $attributes['name'],
+                'email' => $attributes['email'],
+                'password' => $attributes['password'],
+                'rol' => 'Personal',
+                'idempresa' => Empresas::latest('id')->first()->id
+            ]
+        );
         Auth::login($user);
-        return redirect('/dashboard');
+        return view('/laravel-examples/user-profile');
     }
 }

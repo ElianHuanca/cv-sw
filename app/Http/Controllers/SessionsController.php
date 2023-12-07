@@ -23,7 +23,7 @@ class SessionsController extends Controller
         if(Auth::attempt($attributes))
         {
             session()->regenerate();
-            return redirect('dashboard')->with(['success'=>'You are logged in.']);
+            return view('laravel-examples/user-profile');//return redirect()->route('/user-profile')->with(['success'=>'You are logged in.']);
         }
         else{
 
