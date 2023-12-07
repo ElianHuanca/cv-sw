@@ -40,6 +40,8 @@ ALTER TABLE users
 ADD COLUMN pathcv TEXT;
 ALTER TABLE users
 ADD COLUMN textcv TEXT;
+ALTER TABLE users
+ADD COLUMN celular VARCHAR(8);
 
 CREATE TABLE trabajos(
 	id serial PRIMARY KEY,	
@@ -85,7 +87,7 @@ INSERT INTO empresas (razon, tipo) VALUES ('Pil Andina', 'Grande');
 INSERT INTO empresas (razon, tipo) VALUES ('Imcruz', 'Grande');
 INSERT INTO empresas (razon, tipo) VALUES ('Banco De Credito De Bolivia BCP	', 'Grande');
 
-INSERT INTO sucursales (direccion, ciudad,idempresa,longitud,latitud) VALUES
+INSERT INTO sucursales (direccion, ciudad,idempresa,latitud,longitud) VALUES
 ('Planta Parque Industrial Mz PI-6','Santa Cruz', 1,-17.7693129,-63.1491619),
 ('Oficina Central Av. Cristo Redentor #1500','Santa Cruz', 1,-17.7654058,-63.1870018),
 ('Oficina Comercial Parque Industrial Mz. PI-27','Santa Cruz', 1,-17.7640142,-63.1491083),
@@ -283,6 +285,24 @@ Basico
 Intermedio
 ','cv/FaZbKfHZQn96NuS3IeWKQX0ryeAc3hXkG6rkFcCZ.pdf');
 
+CREATE OR REPLACE FUNCTION agregarCelular()
+RETURNS VOID AS $$
+DECLARE
+    iduser INT;
+    cant INT;
+    numero VARCHAR(8);
+BEGIN 
+    SELECT COUNT(*) INTO cant FROM users;
+    
+    FOR iduser IN 1..cant LOOP
+        numero := (floor(random() * (79999999 - 70000000) + 70000000));
+        UPDATE users SET celular = numero WHERE id = iduser;
+    END LOOP;
+END;
+$$ LANGUAGE plpgsql;
+SELECT agregarCelular();
+
+
 CREATE OR REPLACE FUNCTION randomCategoria()
 RETURNS VARCHAR(100) AS $$
 declare num INT;
@@ -441,7 +461,7 @@ end;
 $$ LANGUAGE plpgsql;
 
 
-CREATE OR REPLACE FUNCTION insertarTrabajosHabilidatos()
+CREATE OR REPLACE FUNCTION insertarTrabajosDisponibles()
 RETURNS VOID AS $$
 DECLARE 
     idempresas INT;responsabilidades text[];requisitos text[];idsucursales INT;categoria VARCHAR(50);cargo VARCHAR(50);salario FLOAT;vacancia INT; veces INT;fecha DATE;fechafin DATE;
@@ -467,7 +487,43 @@ begin
 	end loop;
 end;
 $$ LANGUAGE plpgsql;
-SELECT insertarTrabajosHabilidatos();
+SELECT insertarTrabajosDisponibles();
+
+CREATE OR REPLACE FUNCTION insertarTrabajosFinalizados()
+RETURNS VOID AS $$
+DECLARE 
+    idempresas INT;responsabilidades text[];requisitos text[];idsucursales INT;categoria VARCHAR(50);cargo VARCHAR(50);salario FLOAT; veces INT;fecha DATE;fechafin DATE;
+begin
+	idempresas:=(select count(*) from empresas);
+	while (idempresas>0) LOOP
+		veces:=(SELECT floor(random() * (100 - 70 )+70));
+		while (veces>0) LOOP
+			categoria:=(SELECT randomCategoria());
+			cargo:=(SELECT  randomCargo(categoria));
+			idsucursales:=(SELECT id FROM sucursales where sucursales.idempresa=idempresa ORDER BY random() LIMIT 1);
+			responsabilidades:=(SELECT responsabilidades(categoria,cargo));
+			requisitos:=(SELECT requisitos(categoria,cargo));
+			salario:=(SELECT floor(random() * (7000 - 2000 )+2000));
+			--vacancia:=(SELECT floor(random() * 3) + 1 );
+			fecha:=(SELECT fecha_aleatoria FROM generate_series('2023-09-01'::date, '2023-10-31'::date, '1 day') AS fecha_aleatoria ORDER BY random() LIMIT 1);
+			fechafin:=(SELECT fecha_aleatoria FROM generate_series('2023-11-01'::date, '2023-12-07'::date, '1 day') AS fecha_aleatoria ORDER BY random() LIMIT 1);								
+			insert into trabajos(cargo, responsabilidades, requisitos, salario, vacancia, fecha,fechaFin, categoria,idempresa, idsucursal,estado) 
+			values(cargo,responsabilidades,requisitos,salario,0,fecha,fechafin,categoria,idempresas,idsucursales,false);									
+			veces:=veces-1;
+		end loop;
+		idempresas:=idempresas-1;
+	end loop;
+end;
+$$ LANGUAGE plpgsql;
+SELECT insertarTrabajosFinalizados();
+
+SELECT s.ciudad, t.estado,COUNT(t.id) AS cantidad_trabajos
+FROM sucursales s
+JOIN trabajos t ON s.id = t.idsucursal
+WHERE t.idempresa = 1  -- Reemplaza 1 con el ID de la empresa específica
+GROUP BY s.ciudad,t.estado
+order by s.ciudad;
+
 
 
 SELECT * FROM empresas
