@@ -19,13 +19,16 @@
                         <table class="table align-items-center mb-0">
                             <thead>
                                 <tr>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    <th
+                                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Empresa
                                     </th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    <th
+                                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Lugar
                                     </th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    <th
+                                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Cargo
                                     </th>
                                     <th
@@ -60,47 +63,40 @@
                                         <td class="text-center">
                                             <p class="text-xs font-weight-bold mb-0">{{ $trabajo->empresa->razon }}</p>
                                         </td>
-                                        <td class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">{{ $trabajo->sucursal->direccion }}</p>
-                                        </td>
+
                                         <td class="text-center">
                                             <p class="text-xs font-weight-bold mb-0">{{ $trabajo->cargo }}</p>
                                         </td>
                                         <td class="text-center">
                                             @php
                                                 $responsabilidades = $trabajo->responsabilidades;
-                                                // Reemplazar llaves por corchetes
-                                                $responsabilidades = str_replace('{', '[', $responsabilidades);
-                                                $responsabilidades = str_replace('}', ']', $responsabilidades);
-                                                // Decodificar la cadena JSON
-                                                $responsabilidades = json_decode($responsabilidades);
-                                                //dd($responsabilidades);
+
+                                                // Decodificar la cadena JSON solo si no es nulo y es una cadena JSON válida
+                                                $responsabilidades = !is_null($responsabilidades) && json_decode($responsabilidades) ? json_decode($responsabilidades) : [];
+
+                                                // Verificar si $responsabilidades es un array y tiene elementos
+                                                if (is_array($responsabilidades) && count($responsabilidades) > 0) {
+                                                    echo '<p class="text-xs font-weight-bold mb-0">' . $responsabilidades[0] . '</p>';
+                                                } else {
+                                                    echo '<p class="text-xs font-weight-bold mb-0">No hay datos disponibles</p>';
+                                                }
                                             @endphp
-                                            {{-- <ul>
-                                                @foreach ($responsabilidades as $responsabilidad)
-                                                    <li class="text-xs font-weight-bold mb-0">{{ $responsabilidad }}</li>
-                                                @endforeach
-                                            </ul> --}}
-                                            <p class="text-xs font-weight-bold mb-0">{{ $responsabilidades[0] }}</p>
                                         </td>
+
                                         <td class="text-center">
                                             @php
                                                 $requisitos = $trabajo->requisitos;
 
-                                                // Reemplazar llaves por corchetes
-                                                $requisitos = str_replace('{', '[', $requisitos);
-                                                $requisitos = str_replace('}', ']', $requisitos);
+                                                // Decodificar la cadena JSON solo si no es nulo y es una cadena JSON válida
+                                                $requisitos = !is_null($requisitos) && json_decode($requisitos) ? json_decode($requisitos) : [];
 
-                                                // Decodificar la cadena JSON
-                                                $requisitos = json_decode($requisitos);
-                                                //dd($responsabilidades);
+                                                // Verificar si $requisitos es un array y tiene elementos
+                                                if (is_array($requisitos) && count($requisitos) > 0) {
+                                                    echo '<p class="text-xs font-weight-bold mb-0">' . $requisitos[0] . '</p>';
+                                                } else {
+                                                    echo '<p class="text-xs font-weight-bold mb-0">No hay datos disponibles</p>';
+                                                }
                                             @endphp
-                                            {{-- <ul>
-                                                @foreach ($requisitos as $requisito)
-                                                    <li class="text-xs font-weight-bold mb-0">{{ $requisito }}</li>
-                                                @endforeach
-                                            </ul> --}}
-                                            <p class="text-xs font-weight-bold mb-0">{{ $requisitos[0] }}</p>
                                         </td>
                                         <td class="text-center">
                                             <p class="text-xs font-weight-bold mb-0">{{ $trabajo->salario }}Bs</p>
@@ -111,11 +107,11 @@
                                         <td class="text-center">
                                             <p class="text-xs font-weight-bold mb-0">{{ $trabajo->fechafin }}</p>
                                         </td>
-                                        <td class="text-center d-flex justify-content-center">                                            
+                                        <td class="text-center d-flex justify-content-center">
                                             <a href="{{ route('trabajos.edit', $trabajo->id) }}" class="mx-3"
                                                 data-bs-toggle="tooltip" data-bs-original-title="Editar médico">
                                                 <i class="fas fa-user-edit text-secondary"></i>
-                                            </a>                                            
+                                            </a>
                                             <form action="{{ route('trabajos.destroy', $trabajo->id) }}" method="POST"
                                                 onsubmit="return confirm('¿Estás seguro de que deseas eliminar este médico?')">
                                                 @csrf

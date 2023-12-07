@@ -27,6 +27,7 @@ class User extends Authenticatable
         'idempresa', 
         'rol', 
         'url',
+        'celular',
         'pathcv',
         'textcv'
     ];

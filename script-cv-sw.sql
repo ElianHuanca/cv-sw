@@ -1,5 +1,20 @@
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 CREATE EXTENSION IF NOT EXISTS plpgsql;
+-- Database: cv-sw
+
+-- DROP DATABASE IF EXISTS "cv-sw";
+
+CREATE DATABASE "cv-sw"
+    WITH
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'Spanish_Bolivia.1252'
+    LC_CTYPE = 'Spanish_Bolivia.1252'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1
+    IS_TEMPLATE = False;
+	
+
 CREATE TABLE empresas(
 	id serial PRIMARY KEY,
 	razon varchar(200),
@@ -10,8 +25,8 @@ CREATE TABLE sucursales(
 	id serial PRIMARY KEY,
 	direccion varchar(255),
 	ciudad varchar(50),
-	latitud varchar(50),
-	longitud varchar(50),
+	latitud float,
+	longitud float,
 	idempresa INT REFERENCES empresas(id)
 );
 
@@ -55,66 +70,61 @@ CREATE TABLE entrevistas(
 	idpostulacion INT REFERENCES postulaciones(id),
 	fecha DATE,
 	hora TIME,
-	resultado ,
-	
-)
+	resultado text,
+	estado boolean
+);
 
 INSERT INTO empresas (razon, tipo) VALUES ('Embol', 'Grande');
-INSERT INTO empresas (razon, tipo) VALUES ('Cerveceria Boliviana Nacional CBN', 'Mediana');
-INSERT INTO empresas (razon, tipo) VALUES ('123 Industries', 'Grande');
-INSERT INTO empresas (razon, tipo) VALUES ('Tech Innovators Ltd.', 'Pequena');
-INSERT INTO empresas (razon, tipo) VALUES ('Global Solutions Inc.', 'Mediana');
-INSERT INTO empresas (razon, tipo) VALUES ('Quality Enterprises', 'Grande');
-INSERT INTO empresas (razon, tipo) VALUES ('Swift Services LLC', 'Pequena');
-INSERT INTO empresas (razon, tipo) VALUES ('Pro Business Systems', 'Mediana');
-INSERT INTO empresas (razon, tipo) VALUES ('Epic Ventures Group', 'Grande');
-INSERT INTO empresas (razon, tipo) VALUES ('Infinite Innovations', 'Pequena');
+INSERT INTO empresas (razon, tipo) VALUES ('Cerveceria Boliviana Nacional CBN', 'Grande');
+INSERT INTO empresas (razon, tipo) VALUES ('Farmacorp', 'Grande');
+INSERT INTO empresas (razon, tipo) VALUES ('Sofia', 'Grande');
+INSERT INTO empresas (razon, tipo) VALUES ('Tigo', 'Grande');
+INSERT INTO empresas (razon, tipo) VALUES ('Banco Mercantil Santa Cruz BMSC', 'Grande');
+INSERT INTO empresas (razon, tipo) VALUES ('Banco Nacional De Bolivia BNB', 'Grande');
+INSERT INTO empresas (razon, tipo) VALUES ('Pil Andina', 'Grande');
+INSERT INTO empresas (razon, tipo) VALUES ('Imcruz', 'Grande');
+INSERT INTO empresas (razon, tipo) VALUES ('Banco De Credito De Bolivia BCP	', 'Grande');
 
-INSERT INTO sucursales (direccion, ciudad,idempresa,latitud,longitud) VALUES
-('Planta 
-Parque Industrial Mz PI-6','Santa Cruz', 1,),
-('Scz-Oficina Central
-Av. Cristo Redentor #1500','Santa Cruz', 1),
-('Scz-Oficina Comercial
-Parque Industrial Mz. PI-27','Santa Cruz', 1),
-('Oficina Las Torres
-Avenida Arce # 2519 Edificio Torres del Poeta Torre B Piso 15','La Paz', 1),
-('Planta Rio Seco
-Carretera Panamericana ex tranca Rio Seco','La Paz',1),
-('Oficina Circunvalación
-Av. Circunvalación # 1993 (entre A.Quijarro y J.Rosales)','Cochabamba',1)
-('Planta Piñami
-Av. Blanco Galindo Km10 (Z.Piñami)','Cochabamba',1)
-('303 Cedar St, City3', 3),
-('404 Birch St, City3', 3),
-('505 Spruce St, City4', 4),
-('606 Fir St, City4', 4),
-('707 Redwood St, City5', 5),
-('808 Sequoia St, City5', 5),
-('909 Pinecone St, City5', 5),
-('111 Oak Leaf St, City6', 6),
-('222 Acorn St, City7', 7),
-('333 Chestnut St, City7', 7),
-('444 Walnut St, City8', 8),
-('555 Hazelnut St, City8', 8),
-('666 Pecan St, City9', 9),
-('777 Almond St, City9', 9),
-('888 Cashew St, City9', 9),
-('999 Pistachio St, City10', 10);
+INSERT INTO sucursales (direccion, ciudad,idempresa,longitud,latitud) VALUES
+('Planta Parque Industrial Mz PI-6','Santa Cruz', 1,-17.7693129,-63.1491619),
+('Oficina Central Av. Cristo Redentor #1500','Santa Cruz', 1,-17.7654058,-63.1870018),
+('Oficina Comercial Parque Industrial Mz. PI-27','Santa Cruz', 1,-17.7640142,-63.1491083),
+('Oficina Las Torres Avenida Arce # 2519 Edificio Torres del Poeta Torre B Piso 15','La Paz', 1,-16.5095557,-68.1621332),
+('Planta Rio Seco Carretera Panamericana ex tranca Rio Seco','La Paz',1,-16.4883534,-68.2910229),
+('Oficina Circunvalación Av. Circunvalación # 1993 (entre A.Quijarro y J.Rosales)','Cochabamba',1,-17.369383,-66.145404),
+('Planta Piñami Av. Blanco Galindo Km10 (Z.Piñami)','Cochabamba',1,-17.3865646,-66.2550557),
+('Av. Centenario Final s/n. Zona Taquiña.','Cochabamba', 2,-17.3286894,-66.1872986),
+('Doble vía La Guardia Km. 14.','Santa Cruz', 2,-17.7707534,-63.2040972),
+('Av. Montes #400','La Paz', 2,-16.4911263,-68.149807),
+('Av. Mariscal Santa Cruz y Calle Ayacucho','La Paz', 3,-16.5005902,-68.1474619),
+('Centro Comercial Shopping Norte calle Potosí entre Ayacucho y Socabaya.','La Paz', 3,-16.5005902,-68.1474619),
+('Av.Melchor Perez Esq.D´orbigni','Cochabamba', 3,-17.3949449,-66.1947694),
+('Av Ballivian # 665','Cochabamba', 3,-17.3911813,-66.1863056),
+('Avenida Virgen De Cotoca 2Do.Anillo','Santa Cruz', 3,-17.7801828,-63.1856933),
+('Avenida Irala Nro.564','Santa Cruz', 3,-17.7898378,-63.2095634),
+('Parque Industrial Manzana 7','Santa Cruz',4,-17.7903059,-63.2434832),
+('Av. Villazon Km 5','Cochabamba', 4,-17.3739936,-66.175783),
+('Calle 15 de Abril esquina','La Paz', 4,-16.495947,-68.2072687),
+('Megacenter Primer Piso, Av. El Trompillo','Santa Cruz',5,-17.7910684,-63.235278),
+('Av. José Ballivian 548','Cochabamba',5,-17.3887636,-66.1614391),
+('Edif. MEGACENTER, Av. Rafael Pabón','La Paz', 5,-16.5231353,-68.1339067),
+('esquina, Doble vía La Guardia 3er Anillo Externo','Santa Cruz',6,-17.8070638,-63.2415104),
+('Calle Ismael Montes N° 385 entre Esteban Arze y, Calle 25 de Mayo','Cochabamba',6,-17.3875773,-66.1768735),
+('Av Satélite 288, El Alto','La Paz',6,-16.5147852,-68.1676107),
+('C/Warnes Y Chuquisaca','Santa Cruz',7,-17.7861401,-63.1834764),
+('C. Esteban Arze 379','Cochabamba',7,-17.3895142,-66.1883385),
+('Av.Buenos Aires y Tumusla','La Paz',7,-16.4946133,-68.1493665),
+('Av. Beni 5to anillo','Santa Cruz',8,-17.7439347,-63.173929),
+('Pacific Condominio, Irigoyen 1886','Cochabamba',8,-17.3723024,-66.1859031),
+('Av. 3, El Alto','La Paz',8,-16.490344,-68.2060861),
+('Av. Cristóbal De Mendoza 164','Santa Cruz',9,-17.782757,-63.2370318),
+('Av. América Nº 342','Cochabamba',9,-17.3785617,-66.1781044),
+('Av.Roma C.10','La Paz',9,-16.5404504,-68.0905303),
+('24 de septiembre','Santa Cruz',10,-17.7824459,-63.1826857),
+('Calle Nataniel Aguirre esquina Calama S-0498','Cochabamba',10,-17.3982162,-66.175144),
+('Av. Arce esq, Campos','La Paz',10,-16.5169563,-68.1539827);
 
-
-
-
-
-
-
-
-
-
-
-
-
-INSERT INTO users (name,email,password,idempresa)
+INSERT INTO users (name,email,password,rol,idempresa)
 VALUES
   ('Molly Sharp','mauris.quis.turpis@icloud.org',crypt('12345678', gen_salt('bf')),'Personal',1),
   ('Akeem Vazquez','in.consequat@icloud.net',crypt('12345678', gen_salt('bf')),'Personal',2),
@@ -140,7 +150,7 @@ VALUES
   ('Trevor Weiss','amet@aol.edu',crypt('12345678', gen_salt('bf')),'Personal',9),
   ('Giacomo Ramsey','quisque.ac.libero@yahoo.couk',crypt('12345678', gen_salt('bf')),'Personal',10);
 
-insert into users (name,email,password,rol,url,texcv,pathcv)
+insert into users (name,email,password,rol,url,textcv,pathcv)
 values
 	('Isela Huanca','isela@gmail.com',crypt('12345678', gen_salt('bf')),'Postulante','https://sw-proyects.s3.amazonaws.com/cv/FaZbKfHZQn96NuS3IeWKQX0ryeAc3hXkG6rkFcCZ.pdf','MARTHA ISELA HUANCA CHOQUE
 Ingeniera Civil
@@ -271,8 +281,8 @@ Ingles
 Basico
 -
 Intermedio
-','cv/FaZbKfHZQn96NuS3IeWKQX0ryeAc3hXkG6rkFcCZ.pdf')
- 
+','cv/FaZbKfHZQn96NuS3IeWKQX0ryeAc3hXkG6rkFcCZ.pdf');
+
 CREATE OR REPLACE FUNCTION randomCategoria()
 RETURNS VARCHAR(100) AS $$
 declare num INT;
@@ -438,7 +448,7 @@ DECLARE
 begin
 	idempresas:=(select count(*) from empresas);
 	while (idempresas>0) LOOP
-		veces:=(SELECT floor(random() * (200 - 100 )+100));
+		veces:=(SELECT floor(random() * (100 - 70 )+70));
 		while (veces>0) LOOP
 			categoria:=(SELECT randomCategoria());
 			cargo:=(SELECT  randomCargo(categoria));
@@ -458,6 +468,7 @@ begin
 end;
 $$ LANGUAGE plpgsql;
 SELECT insertarTrabajosHabilidatos();
+
 
 SELECT * FROM empresas
 SELECT * FROM sucursales

@@ -10,7 +10,7 @@ class Sucursales extends Model
     use HasFactory;
 
     protected $table = 'sucursales';
-    protected $fillable = ['direccion', 'idempresa'];
+    protected $fillable = ['direccion','ciudad','latitud','longitud', 'idempresa'];
     public $timestamps = false;
     public function empresa()
     {

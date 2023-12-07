@@ -1,12 +1,16 @@
 <?php
 
 use App\Http\Controllers\ChangePasswordController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EmpresasController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InfoUserController;
+use App\Http\Controllers\PersonalController;
 use App\Http\Controllers\PostulacionesController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ResetController;
 use App\Http\Controllers\SessionsController;
+use App\Http\Controllers\SucursalesController;
 use App\Http\Controllers\TrabajosController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Http\Request;
@@ -72,21 +76,21 @@ Route::group(['middleware' => 'auth'], function () {
 	})->name('sign-up');
 
 	Route::resource('users', UsersController::class)->names('users');
+	Route::resource('empresas', EmpresasController::class)->names('empresas');
 	Route::resource('trabajos', TrabajosController::class)->names('trabajos');
+	Route::resource('personal', PersonalController::class)->names('personal');
+	Route::resource('sucursales', SucursalesController::class)->names('sucursales');
+
 	Route::get('showEmpresas', [TrabajosController::class, 'showEmpresas'])->name('showEmpresas');
 	Route::delete('eliminarEmpresa/{id}', [TrabajosController::class, 'eliminarEmpresa'])->name('eliminarEmpresa');
-
+	Route::get('gestionarUsuarios', [UsersController::class, 'gestionUsuarios'])->name('gestionarUsuarios');
+	Route::get('agregarPersonal', [UsersController::class, 'agregarPersonal'])->name('agregarPersonal');
+	Route::post('registrarPersonalDirecto', [UsersController::class, 'store'])->name('registrarPersonalDirecto');
 
 	Route::get('showPostulacion/{id}', [PostulacionesController::class, 'showPostulaciones'])->name('showPostulaciones');
+	Route::post('registrarPersonal', [PostulacionesController::class, 'registrarPersonal'])->name('registrarPersonal');
 
-
-
-
-
-
-
-
-
+	Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 });
 
 Route::group(['middleware' => 'guest'], function () {

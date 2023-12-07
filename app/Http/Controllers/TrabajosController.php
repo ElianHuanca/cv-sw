@@ -124,7 +124,7 @@ class TrabajosController extends Controller
         $id=Auth::user()->id;
         $user=User::where('id', $id)->first();
         $trabajos = Trabajos::where('id', $user->idempresa)->get();
-       
+    
         return view('trabajos.getTrabajos', compact('trabajos'));
     }
     public function EliminarEmpresa($idempresa){

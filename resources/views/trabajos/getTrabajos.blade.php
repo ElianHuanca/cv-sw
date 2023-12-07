@@ -59,7 +59,7 @@
                                             <p class="text-xs font-weight-bold mb-0">{{ $trabajo->empresa->razon }}</p>
                                         </td>
                                         <td class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">{{ $trabajo->sucursal->direccion }}</p>
+                                            <p class="text-xs font-weight-bold mb-0">{{ $trabajo->sucursal->direccion }} - {{ $trabajo->sucursal->ciudad }}</p>
                                         </td>
                                         <td class="text-center">
                                             <p class="text-xs font-weight-bold mb-0">{{ $trabajo->cargo }}</p>
@@ -67,11 +67,9 @@
                                         <td class="text-center">
                                             @php
                                                 $responsabilidades = $trabajo->responsabilidades;
-
                                                 // Reemplazar llaves por corchetes
                                                 $responsabilidades = str_replace('{', '[', $responsabilidades);
                                                 $responsabilidades = str_replace('}', ']', $responsabilidades);
-
                                                 // Decodificar la cadena JSON
                                                 $responsabilidades = json_decode($responsabilidades);
                                                 //dd($responsabilidades);
@@ -81,27 +79,26 @@
                                                     <li class="text-xs font-weight-bold mb-0">{{ $responsabilidad }}</li>
                                                 @endforeach
                                             </ul> --}}
-                                            <p class="text-xs font-weight-bold mb-0">{{ $responsabilidades[0] }}</p>
-                                        </td>
-                                        <td class="text-center">
-                                            @php
-                                                $requisitos = $trabajo->requisitos;
+                                            <p class="text-xs font-weight-bold mb-0">{{ $responsabilidades[0] }}</p>    
+            </td>
 
-                                                // Reemplazar llaves por corchetes
-                                                $requisitos = str_replace('{', '[', $requisitos);
-                                                $requisitos = str_replace('}', ']', $requisitos);
+            <td class="text-center">
+                @php
+                    $requisitos = $trabajo->requisitos;
 
-                                                // Decodificar la cadena JSON
-                                                $requisitos = json_decode($requisitos);
-                                                //dd($responsabilidades);
-                                            @endphp
-                                            {{-- <ul>
-                                                @foreach ($requisitos as $requisito)
-                                                    <li class="text-xs font-weight-bold mb-0">{{ $requisito }}</li>
-                                                @endforeach
-                                            </ul> --}}
-                                            <p class="text-xs font-weight-bold mb-0">{{ $requisitos[0] }}</p>
-                                        </td>
+                    // Decodificar la cadena JSON solo si no es nulo y es una cadena JSON válida
+                    $requisitos = !is_null($requisitos) && json_decode($requisitos)
+                        ? json_decode($requisitos)
+                        : [];
+
+                    // Verificar si $requisitos es un array y tiene elementos
+                    if (is_array($requisitos) && count($requisitos) > 0) {
+                        echo '<p class="text-xs font-weight-bold mb-0">' . $requisitos[0] . '</p>';
+                    } else {
+                        echo '<p class="text-xs font-weight-bold mb-0">No hay datos disponibles</p>';
+                    }
+                @endphp
+            </td>
                                         <td class="text-center">
                                             <p class="text-xs font-weight-bold mb-0">{{ $trabajo->salario }}Bs</p>
                                         </td>
