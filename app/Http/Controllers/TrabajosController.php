@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Areas;
 use App\Models\Sucursales;
 use App\Models\Trabajos;
 use App\Models\User;
@@ -19,13 +20,16 @@ class TrabajosController extends Controller
         $usuario = Auth::user();
         if ($usuario->rol == 'Postulante') {
             $trabajos = Trabajos::where('estado', true)
-                ->whereNotIn('id', function ($query) {
-                    $query->select('idtrabajo')->from('postulaciones');
+                ->whereNotIn('id', function ($query) use ($usuario) {
+                    $query->select('idtrabajo')->from('postulaciones')->where('iduser', $usuario->id);
                 })
+                ->orderBy('idarea', 'desc')
                 ->paginate(10);
-            return view('trabajos.index', compact('trabajos'));
+            $areas = Areas::all();
+            //dd($trabajos);
+            return view('trabajos.index', compact('trabajos', 'areas'));
         } else {
-            $trabajos = Trabajos::where('estado', true)->paginate(10);
+            $trabajos = Trabajos::orderBy('estado', 'desc')->orderBy('idarea', 'desc')->paginate(10);
             return view('trabajos.index', compact('trabajos'));
         }
     }
@@ -37,7 +41,8 @@ class TrabajosController extends Controller
     {
         $user = auth()->user();
         $sucursales = Sucursales::where('idempresa', $user->idempresa)->get();
-        return view('trabajos.create', compact('sucursales'));
+        $areas = Areas::all();
+        return view('trabajos.create', compact('sucursales', 'areas'));
     }
 
     /**
@@ -54,7 +59,7 @@ class TrabajosController extends Controller
             'vacancia' => 'required',
             'fechafin' => 'required',
             'idsucursal' => 'required',
-            'categoria' => 'required'
+            'idarea' => 'required'
         ]);
         $user = auth()->user();
         $responsabilidades = explode("\n", str_replace(["\r"], "", $request->responsabilidades));
@@ -75,8 +80,8 @@ class TrabajosController extends Controller
             'salario' => $request->salario,
             'vacancia' => $request->vacancia,
             'fechafin' => $request->fechafin,
-            'categoria' => $request->categoria,
-            'idempresa' => $user->idempresa,
+            'idarea' => $request->idarea,
+            'iduser' => $user->id,
             'idsucursal' => $request->idsucursal,
         ]);
 

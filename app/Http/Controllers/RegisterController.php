@@ -26,6 +26,7 @@ class RegisterController extends Controller
             'name' => ['required', 'max:50'],
             'email' => ['required', 'email', 'max:50', Rule::unique('users', 'email')],
             'password' => ['required', 'min:5', 'max:20'],
+            'celular' => ['required', 'min:8', 'max:8'],
             'agreement' => ['accepted']
         ]);
         $attributes['password'] = bcrypt($attributes['password']);

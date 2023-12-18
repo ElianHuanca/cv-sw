@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\TestMail;
 use App\Models\Entrevistas;
 use App\Models\Postulaciones;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class EntrevistasController extends Controller
 {
@@ -31,13 +33,17 @@ class EntrevistasController extends Controller
      */
     public function store(Request $request)
     {
-        Entrevistas::create(
+        $entrevista=Entrevistas::create(
             [
-                'fecha' => $request->hora,
-                'email' => $request->email,
+                'fecha' => $request->fecha,
+                'hora' => $request->hora,
+                //'email' => $request->email,
                 'idpostulacion' => $request->idpostulacion,
             ]
         );
+
+        Mail::to('huancacori@gmail.com')->send(new TestMail($entrevista->id));
+
         return redirect()->route('entrevistas.index')->with('success', 'Entrevista creada correctamente');
     }
 

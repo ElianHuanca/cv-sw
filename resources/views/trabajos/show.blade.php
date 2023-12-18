@@ -44,8 +44,9 @@
                         <p><strong>Vacancia:</strong> {{ $trabajo->vacancia }}</p>
                         <p><strong>Fecha de inicio:</strong> {{ $trabajo->fecha }}</p>
                         <p><strong>Fecha de fin:</strong> {{ $trabajo->fechafin }}</p>
-                        <p><strong>Categoría:</strong> {{ $trabajo->categoria }}</p>
-                        <p><strong>Empresa:</strong> {{ $trabajo->empresa->razon }}</p>
+                        <p><strong>Area De Trabajo:</strong> {{ $trabajo->area->nombre }}</p>
+                        {{-- <p><strong>Empresa:</strong> {{ $trabajo->empresa->razon }}</p> --}}
+                        <p><strong>Reclutador:</strong> {{ $trabajo->user->name }}</p>
                         <p><strong>Sucursal:</strong> {{ $trabajo->sucursal->direccion }}</p>
                         <p><strong>Ciudad:</strong> {{ $trabajo->sucursal->ciudad }}</p>
 

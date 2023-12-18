@@ -59,7 +59,7 @@
                             </div>
                         </div>
                         <div class="mt-3">
-                            <button type="submit" class="btn btn-primary">Guardar Personal</button>
+                            <button type="submit" class="btn bg-gradient-danger">Guardar Personal</button>
                         </div>
                     </form>
                 </div>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AreasController;
 use App\Http\Controllers\ChangePasswordController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmpresasController;
@@ -83,6 +84,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('personal', PersonalController::class)->names('personal');
 	Route::resource('sucursales', SucursalesController::class)->names('sucursales');
 	Route::resource('postulaciones', PostulacionesController::class)->names('postulaciones');
+	Route::resource('areas', AreasController::class)->names('areas');
 
 	Route::get('/entrevistas', [EntrevistasController::class, 'index'])->name('entrevistas.index');
 	Route::post('/entrevistas', [EntrevistasController::class, 'store'])->name('entrevistas.store');

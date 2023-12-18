@@ -35,14 +35,27 @@
                                     <label for="user-razon" class="form-control-label">{{ __('Razon Social') }}</label>
                                     <div class="@error('user.razon')border border-danger rounded-3 @enderror">
                                         <input class="form-control" value="{{ $empresa->razon }}" type="text"
-                                            placeholder="Razon Social" id="user-razon" name="razon">
+                                            placeholder="Razon Social" id="user-razon" name="razon" readonly>
                                         @error('razon')
                                             <p class="text-danger text-xs mt-2">{{ $message }}</p>
                                         @enderror
                                     </div>
                                 </div>
                             </div>
+
                             <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="user-razon" class="form-control-label">{{ __('Tamaño De Empresa') }}</label>
+                                    <div class="@error('user.razon')border border-danger rounded-3 @enderror">
+                                        <input class="form-control" value="{{ $empresa->tipo }}" type="text"
+                                            placeholder="Razon Social" id="user-razon" name="razon" readonly>
+                                        @error('razon')
+                                            <p class="text-danger text-xs mt-2">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="tipo-empresa"
                                         class="form-control-label">{{ __('Tamaño De La Empresa') }}</label>
@@ -60,13 +73,13 @@
                                         @enderror
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
 
                         </div>
-                        <div class="d-flex justify-content-end">
+                        {{-- <div class="d-flex justify-content-end">
                             <button type="submit"
                                 class="btn bg-gradient-dark btn-md mt-4 mb-4">{{ 'Guardar Cambios' }}</button>
-                        </div>
+                        </div> --}}
                     </form>
                 </div>
             </div>
@@ -253,8 +266,8 @@
             sucursalesData.forEach(function(sucursal) {
                 var marker = new google.maps.Marker({
                     position: {
-                        lat: parseFloat(sucursal.longitud),
-                        lng: parseFloat(sucursal.latitud)
+                        lat: parseFloat(sucursal.latitud),
+                        lng: parseFloat(sucursal.longitud)
                     },
                     map: map,
                     title: sucursal

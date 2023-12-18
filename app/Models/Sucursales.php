@@ -14,6 +14,6 @@ class Sucursales extends Model
     public $timestamps = false;
     public function empresa()
     {
-        return $this->belongsTo(Empresa::class, 'idempresa');
+        return $this->belongsTo(Empresas::class, 'idempresa');
     }
 }

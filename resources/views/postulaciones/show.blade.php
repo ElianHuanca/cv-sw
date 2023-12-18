@@ -44,8 +44,9 @@
                         <p><strong>Vacancia:</strong> {{ $trabajo->vacancia }}</p>
                         <p><strong>Fecha de inicio:</strong> {{ $trabajo->fecha }}</p>
                         <p><strong>Fecha de fin:</strong> {{ $trabajo->fechafin }}</p>
-                        <p><strong>Categoría:</strong> {{ $trabajo->categoria }}</p>
-                        <p><strong>Empresa:</strong> {{ $trabajo->empresa->razon }}</p>
+                        <p><strong>Area De Trabajo:</strong> {{ $trabajo->area->nombre }}</p>
+                        {{-- <p><strong>Empresa:</strong> {{ $trabajo->empresa->razon }}</p> --}}
+                        <p><strong>Reclutador:</strong> {{ $trabajo->user->name }}</p>
                         <p><strong>Sucursal:</strong> {{ $trabajo->sucursal->direccion }}</p>
                         <p><strong>Ciudad:</strong> {{ $trabajo->sucursal->ciudad }}</p>
 
@@ -101,8 +102,7 @@
                                 @foreach ($postulaciones as $postulacion)
                                     <tr>
                                         <td class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">{{ $postulacion->trabajo->cargo }} -
-                                                {{ $postulacion->trabajo->empresa->razon }}</p>
+                                            <p class="text-xs font-weight-bold mb-0">{{ $postulacion->trabajo->cargo }}</p>
                                         </td>
                                         <td class="text-center">
                                             <p class="text-xs font-weight-bold mb-0">{{ $postulacion->usuario->name }}</p>
@@ -132,7 +132,7 @@
                                                     Analizamos Su Postulacion</p>
                                             @endif
                                         </td>
-                                        @if($postulacion->estado == true)
+                                        @if ($postulacion->estado == true)
                                             <td class="text-center">
                                                 <a href="{{ route('entrevistas.create', $postulacion->id) }}"
                                                     class="mx-3" data-bs-toggle="tooltip"

@@ -22,6 +22,14 @@
                                     </th>
                                     <th
                                         class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        Lugar
+                                    </th>
+                                    <th
+                                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                        Ciudad
+                                    </th>
+                                    <th
+                                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         Postulante
                                     </th>
                                     <th
@@ -38,8 +46,16 @@
                                 @foreach ($postulaciones as $postulacion)
                                     <tr>
                                         <td class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">{{ $postulacion->trabajo->cargo }} -
-                                                {{ $postulacion->trabajo->empresa->razon }}</p>
+                                            <p class="text-xs font-weight-bold mb-0">{{ $postulacion->trabajo->cargo }}
+                                            </p>
+                                        </td>
+                                        <td class="text-center">
+                                            <p class="text-xs font-weight-bold mb-0">{{ $postulacion->trabajo->sucursal->direccion }}
+                                            </p>
+                                        </td>
+                                        <td class="text-center">
+                                            <p class="text-xs font-weight-bold mb-0">{{ $postulacion->trabajo->sucursal->ciudad }}
+                                            </p>
                                         </td>
                                         <td class="text-center">
                                             <p class="text-xs font-weight-bold mb-0">{{ $postulacion->usuario->name }}</p>
@@ -71,7 +87,7 @@
                 </div>
             </div>
             <div class="mt-3 d-flex justify-content-center">
-                {{ $postulaciones->links() }}
+                {{ $postulaciones->links('vendor.pagination.bootstrap-4') }}
             </div>
         </div>
     </div>

@@ -2,27 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Sucursales;
+use App\Models\Areas;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
-class DashboardController extends Controller
+class AreasController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $cantTrabXCiu = DB::table('sucursales')
-        ->join('trabajos', 'sucursales.id', '=', 'trabajos.idsucursal')
-        //->where('trabajos.idempresa', 1)  // Reemplaza 1 con el ID de la empresa específica
-        //->where('trabajos.estado', true)
-        ->groupBy('sucursales.ciudad','trabajos.estado')
-        ->orderBy('sucursales.ciudad')
-        ->select('sucursales.ciudad','trabajos.estado', DB::raw('COUNT(trabajos.id) as cantidad_trabajos'))
-        ->get();
-        //dd($cantTrabXCiu);
-        return view('dashboard', compact('cantTrabXCiu'));
+        $areas = Areas::paginate(5);
+        return view('areas.index', compact('areas'));
     }
 
     /**
@@ -30,7 +21,7 @@ class DashboardController extends Controller
      */
     public function create()
     {
-        //
+        return view('areas.create');
     }
 
     /**
@@ -38,7 +29,13 @@ class DashboardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([            
+            'nombre' => 'required',
+        ]);
+
+        Areas::create($request->all());
+        return redirect()->route('areas.index')
+            ->with('success', 'Area Creado Correctamente');
     }
 
     /**
@@ -54,7 +51,8 @@ class DashboardController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $area = Areas::find($id);
+        return view('areas.edit', compact('area'));
     }
 
     /**
@@ -62,7 +60,10 @@ class DashboardController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $area = Areas::find($id);
+        $area->update($request->all());
+        return redirect()->route('areas.index')
+            ->with('success', 'Area Actualizado Correctamente');
     }
 
     /**
@@ -70,6 +71,9 @@ class DashboardController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $area = Areas::find($id);
+        $area->delete();
+        return redirect()->route('areas.index')
+            ->with('success', 'Area Eliminado Correctamente');
     }
 }

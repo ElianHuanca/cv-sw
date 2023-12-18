@@ -145,7 +145,7 @@ class PostulacionesController extends Controller
     public function obtenerOfertaLaboralPorId($idOfertaLaboral)
     {
         // Ejecuta la consulta SQL con la cláusula WHERE
-        $ofertaLaboral = DB::select("
+        /* $ofertaLaboral = DB::select("
             SELECT
                 'Oferta Laboral - ' || cargo || E'\n' ||
                 'Responsabilidades: ' || array_to_string(responsabilidades, ', ') || E'\n' ||
@@ -158,7 +158,23 @@ class PostulacionesController extends Controller
                 'Categoría: ' || categoria AS oferta_laboral
             FROM trabajos
             WHERE id = :id
+        ", ['id' => $idOfertaLaboral]); */
+        $ofertaLaboral = DB::select("
+        SELECT
+            'Oferta Laboral - ' || cargo || E'\n' ||
+            'Responsabilidades: ' || array_to_string(responsabilidades, ', ') || E'\n' ||
+            'Requisitos: ' || array_to_string(requisitos, ', ') || E'\n' ||
+            'Salario: ' || salario::TEXT || E'\n' ||
+            'Vacancias: ' || vacancia::TEXT || E'\n' ||
+            'Fecha de inicio: ' || fecha::TEXT || E'\n' ||
+            'Fecha de fin: ' || COALESCE(fechafin::TEXT, 'No especificada') || E'\n' ||
+            'Estado: ' || CASE WHEN estado THEN 'Activo' ELSE 'Inactivo' END || E'\n' ||
+            'Área: ' || areas.nombre AS oferta_laboral
+        FROM trabajos
+        INNER JOIN areas ON trabajos.idarea = areas.id
+        WHERE trabajos.id = :id
         ", ['id' => $idOfertaLaboral]);
+
 
         // Verifica si se encontró una oferta laboral con el ID dado
         if (!empty($ofertaLaboral)) {

@@ -91,22 +91,18 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="categoria">Categoria:</label>
-                                    <select name="categoria" class="form-control" required>
-                                        <option value="" selected disabled>Selecciona una categoría</option>
-                                        <option value="Ingenieria">Ingeniería</option>
-                                        <option value="Tecnologia De La Informacion">Tecnología de la Información</option>
-                                        <option value="Finanzas y Contabilidad">Finanzas y Contabilidad</option>
-                                        <option value="Ventas y Marketing">Ventas y Marketing</option>
-                                        <option value="Manufactura y Produccion">Manufactura y Producción</option>
-                                        <option value="Logistica y Transporte">Logística y Transporte</option>
+                                    <label for="idarea">Area:</label>
+                                    <select name="idarea" class="form-control" required>
+                                        @foreach ($areas as $area)
+                                            <option value="{{ $area->id }}">{{ $area->nombre }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
                         </div>
 
                         <div class="mt-3">
-                            <button type="submit" class="btn btn-primary">Guardar Trabajo</button>
+                            <button type="submit" class="btn bg-gradient-danger">Guardar Trabajo</button>
                         </div>
                     </form>
                 </div>
