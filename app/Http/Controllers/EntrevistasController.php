@@ -15,7 +15,18 @@ class EntrevistasController extends Controller
      */
     public function index()
     {
-        //
+        $user = auth()->user();
+        if($user->rol == 'Postulante'){
+            $entrevistas = Entrevistas::join('postulaciones', 'entrevistas.idpostulacion', '=', 'postulaciones.id')
+            ->join('users', 'postulaciones.iduser', '=', 'users.id')
+            ->where('users.id', $user->id)            
+            ->paginate(10);
+            
+        }else{
+            $entrevistas = Entrevistas::where('iduser', $user->id)->paginate(10);
+
+        }
+        return view('entrevistas.index', compact('entrevistas'));
     }
 
     /**
@@ -33,12 +44,14 @@ class EntrevistasController extends Controller
      */
     public function store(Request $request)
     {
+        $user = auth()->user();
         $entrevista=Entrevistas::create(
             [
                 'fecha' => $request->fecha,
                 'hora' => $request->hora,
                 //'email' => $request->email,
                 'idpostulacion' => $request->idpostulacion,
+                'iduser' => $user->id,
             ]
         );
 

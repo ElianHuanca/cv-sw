@@ -9,7 +9,7 @@ class Entrevistas extends Model
 {
     use HasFactory;
     protected $table = 'entrevistas';
-    protected $fillable = ['fecha', 'hora', 'resultado','estado','idpostulacion'];
+    protected $fillable = ['fecha', 'hora', 'resultado','estado','iduser','idpostulacion'];
 
     public $timestamps = false;
 
@@ -18,9 +18,9 @@ class Entrevistas extends Model
         return $this->belongsTo(Postulaciones::class, 'idpostulacion');
     }
 
-    /* public function usuario()
+    public function admin()
     {
         return $this->belongsTo(User::class, 'iduser');
-    } */
+    }
     
 }

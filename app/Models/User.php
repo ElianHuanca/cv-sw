@@ -56,8 +56,9 @@ class User extends Authenticatable
         return $this->belongsTo(Empresas::class, 'idempresa');
     }
 
-    /* public function trabajo()
+    public function entrevista()
     {
-        return $this->hasMany(Postulaciones::class, 'iduser');
-    } */
+        return $this->hasMany(Entrevistas::class, 'iduser');
+    }
+
 }

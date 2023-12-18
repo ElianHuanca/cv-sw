@@ -29,7 +29,7 @@ class TestMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Test Mail',
+            subject: 'Embol Te Quiere Entrevistar',
         );
     }
 
@@ -39,7 +39,8 @@ class TestMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            //view: 'view.name',
+            view: 'testmail',
         );
     }
 
@@ -55,10 +56,24 @@ class TestMail extends Mailable
 
     public function build()
     {
-        $entrevista = Entrevistas::find($this->id);
+        $entrevista = Entrevistas::join('postulaciones', 'entrevistas.idpostulacion', '=', 'postulaciones.id')
+            ->join('trabajos', 'postulaciones.idtrabajo', '=', 'trabajos.id')
+            ->join('sucursales', 'trabajos.idsucursal', '=', 'sucursales.id')
+            ->join('users', 'entrevistas.iduser', '=', 'users.id')
+            ->select(
+                'entrevistas.fecha',
+                'entrevistas.hora',
+                'sucursales.direccion as direccion',
+                'sucursales.ciudad as ciudad',
+                'sucursales.latitud',
+                'sucursales.longitud',
+                'users.name as entrevistador'
+            )
+            ->where('entrevistas.id', $this->id)
+            ->first();
         return $this->from('huancacori@gmail.com', env('MAIL_FROM_NAME'))
-            ->subject('Embol Te Quiere Entrevistar')
-            ->view('testmail')
-            ->with($entrevista);
+            //->subject('Embol Te Quiere Entrevistar')
+            //->view('testmail')
+            ->with(['entrevista' => $entrevista->toArray()]);
     }
 }
