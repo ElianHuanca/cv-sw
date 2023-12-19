@@ -18,7 +18,7 @@ CREATE DATABASE "cv-sw"
 CREATE TABLE empresas(
 	id serial PRIMARY KEY,
 	razon varchar(200),
-	tipo varchar(50)	--tamaño de la empresa
+	tipo varchar(50)
 );
 
 CREATE TABLE sucursales(
@@ -43,6 +43,18 @@ ADD COLUMN textcv TEXT;
 ALTER TABLE users
 ADD COLUMN celular VARCHAR(8);
 
+create table areas(
+	id serial PRIMARY KEY,
+	nombre varchar(100)
+);
+
+insert into areas (nombre) values ('Ingenieria'), 
+('Tecnologia De La Informacion'),
+('Finanzas y Contabilidad'),
+('Ventas y Marketing'),
+('Manufactura y Produccion'),
+('Logistica y Transporte');
+
 CREATE TABLE trabajos(
 	id serial PRIMARY KEY,	
 	cargo VARCHAR(100),
@@ -54,9 +66,10 @@ CREATE TABLE trabajos(
 	fecha DATE DEFAULT CURRENT_DATE,
 	fechafin DATE,
 	estado BOOLEAN DEFAULT true,
-	categoria VARCHAR(50),
-	idempresa INT REFERENCES empresas(id),
-	idsucursal INT REFERENCES sucursales(id)
+	--categoria VARCHAR(50),
+	iduser INT REFERENCES users(id),
+	idsucursal INT REFERENCES sucursales(id),
+	idarea INT references areas(id)
 );
 
 CREATE TABLE postulaciones(
@@ -69,6 +82,7 @@ CREATE TABLE postulaciones(
 
 CREATE TABLE entrevistas(
 	id serial PRIMARY KEY,
+	iduser INT REFERENCES users(id),
 	idpostulacion INT REFERENCES postulaciones(id),
 	fecha DATE,
 	hora TIME,
@@ -76,16 +90,9 @@ CREATE TABLE entrevistas(
 	estado boolean
 );
 
+
+
 INSERT INTO empresas (razon, tipo) VALUES ('Embol', 'Grande');
-INSERT INTO empresas (razon, tipo) VALUES ('Cerveceria Boliviana Nacional CBN', 'Grande');
-INSERT INTO empresas (razon, tipo) VALUES ('Farmacorp', 'Grande');
-INSERT INTO empresas (razon, tipo) VALUES ('Sofia', 'Grande');
-INSERT INTO empresas (razon, tipo) VALUES ('Tigo', 'Grande');
-INSERT INTO empresas (razon, tipo) VALUES ('Banco Mercantil Santa Cruz BMSC', 'Grande');
-INSERT INTO empresas (razon, tipo) VALUES ('Banco Nacional De Bolivia BNB', 'Grande');
-INSERT INTO empresas (razon, tipo) VALUES ('Pil Andina', 'Grande');
-INSERT INTO empresas (razon, tipo) VALUES ('Imcruz', 'Grande');
-INSERT INTO empresas (razon, tipo) VALUES ('Banco De Credito De Bolivia BCP	', 'Grande');
 
 INSERT INTO sucursales (direccion, ciudad,idempresa,latitud,longitud) VALUES
 ('Planta Parque Industrial Mz PI-6','Santa Cruz', 1,-17.7693129,-63.1491619),
@@ -94,63 +101,27 @@ INSERT INTO sucursales (direccion, ciudad,idempresa,latitud,longitud) VALUES
 ('Oficina Las Torres Avenida Arce # 2519 Edificio Torres del Poeta Torre B Piso 15','La Paz', 1,-16.5095557,-68.1621332),
 ('Planta Rio Seco Carretera Panamericana ex tranca Rio Seco','La Paz',1,-16.4883534,-68.2910229),
 ('Oficina Circunvalación Av. Circunvalación # 1993 (entre A.Quijarro y J.Rosales)','Cochabamba',1,-17.369383,-66.145404),
-('Planta Piñami Av. Blanco Galindo Km10 (Z.Piñami)','Cochabamba',1,-17.3865646,-66.2550557),
-('Av. Centenario Final s/n. Zona Taquiña.','Cochabamba', 2,-17.3286894,-66.1872986),
-('Doble vía La Guardia Km. 14.','Santa Cruz', 2,-17.7707534,-63.2040972),
-('Av. Montes #400','La Paz', 2,-16.4911263,-68.149807),
-('Av. Mariscal Santa Cruz y Calle Ayacucho','La Paz', 3,-16.5005902,-68.1474619),
-('Centro Comercial Shopping Norte calle Potosí entre Ayacucho y Socabaya.','La Paz', 3,-16.5005902,-68.1474619),
-('Av.Melchor Perez Esq.D´orbigni','Cochabamba', 3,-17.3949449,-66.1947694),
-('Av Ballivian # 665','Cochabamba', 3,-17.3911813,-66.1863056),
-('Avenida Virgen De Cotoca 2Do.Anillo','Santa Cruz', 3,-17.7801828,-63.1856933),
-('Avenida Irala Nro.564','Santa Cruz', 3,-17.7898378,-63.2095634),
-('Parque Industrial Manzana 7','Santa Cruz',4,-17.7903059,-63.2434832),
-('Av. Villazon Km 5','Cochabamba', 4,-17.3739936,-66.175783),
-('Calle 15 de Abril esquina','La Paz', 4,-16.495947,-68.2072687),
-('Megacenter Primer Piso, Av. El Trompillo','Santa Cruz',5,-17.7910684,-63.235278),
-('Av. José Ballivian 548','Cochabamba',5,-17.3887636,-66.1614391),
-('Edif. MEGACENTER, Av. Rafael Pabón','La Paz', 5,-16.5231353,-68.1339067),
-('esquina, Doble vía La Guardia 3er Anillo Externo','Santa Cruz',6,-17.8070638,-63.2415104),
-('Calle Ismael Montes N° 385 entre Esteban Arze y, Calle 25 de Mayo','Cochabamba',6,-17.3875773,-66.1768735),
-('Av Satélite 288, El Alto','La Paz',6,-16.5147852,-68.1676107),
-('C/Warnes Y Chuquisaca','Santa Cruz',7,-17.7861401,-63.1834764),
-('C. Esteban Arze 379','Cochabamba',7,-17.3895142,-66.1883385),
-('Av.Buenos Aires y Tumusla','La Paz',7,-16.4946133,-68.1493665),
-('Av. Beni 5to anillo','Santa Cruz',8,-17.7439347,-63.173929),
-('Pacific Condominio, Irigoyen 1886','Cochabamba',8,-17.3723024,-66.1859031),
-('Av. 3, El Alto','La Paz',8,-16.490344,-68.2060861),
-('Av. Cristóbal De Mendoza 164','Santa Cruz',9,-17.782757,-63.2370318),
-('Av. América Nº 342','Cochabamba',9,-17.3785617,-66.1781044),
-('Av.Roma C.10','La Paz',9,-16.5404504,-68.0905303),
-('24 de septiembre','Santa Cruz',10,-17.7824459,-63.1826857),
-('Calle Nataniel Aguirre esquina Calama S-0498','Cochabamba',10,-17.3982162,-66.175144),
-('Av. Arce esq, Campos','La Paz',10,-16.5169563,-68.1539827);
+('Planta Piñami Av. Blanco Galindo Km10 (Z.Piñami)','Cochabamba',1,-17.3865646,-66.2550557);
+
+
 
 INSERT INTO users (name,email,password,rol,idempresa)
 VALUES
   ('Molly Sharp','mauris.quis.turpis@icloud.org',crypt('12345678', gen_salt('bf')),'Personal',1),
-  ('Akeem Vazquez','in.consequat@icloud.net',crypt('12345678', gen_salt('bf')),'Personal',2),
-  ('Colin Herman','a.facilisis@google.couk',crypt('12345678', gen_salt('bf')),'Personal',3),
-  ('Stacy Alford','dolor@outlook.edu',crypt('12345678', gen_salt('bf')),'Personal',4),
-  ('Ferris Brock','nibh.quisque.nonummy@outlook.ca',crypt('12345678', gen_salt('bf')),'Personal',5),
-  ('Aline Garner','est.mauris@hotmail.ca',crypt('12345678', gen_salt('bf')),'Personal',6),
-  ('Allistair Morse','velit.sed.malesuada@outlook.com',crypt('12345678', gen_salt('bf')),'Personal',7),
-  ('Whoopi Cummings','hendrerit@outlook.com',crypt('12345678', gen_salt('bf')),'Personal',8),
-  ('Jacqueline Middleton','curabitur.egestas.nunc@yahoo.ca',crypt('12345678', gen_salt('bf')),'Personal',9),
-  ('Lila Owen','sit@yahoo.org',crypt('12345678', gen_salt('bf')),'Personal',10);
-
-INSERT INTO users (name,email,password,rol,idempresa)
+  ('Akeem Vazquez','in.consequat@icloud.net',crypt('12345678', gen_salt('bf')),'Personal',1),
+  ('Colin Herman','a.facilisis@google.couk',crypt('12345678', gen_salt('bf')),'Personal',1),
+  ('Stacy Alford','dolor@outlook.edu',crypt('12345678', gen_salt('bf')),'Personal',1),
+  ('Ferris Brock','nibh.quisque.nonummy@outlook.ca',crypt('12345678', gen_salt('bf')),'Personal',1);
+ 
+INSERT INTO users (name,email,password,rol,idempresa,celular)
 VALUES
-  ('Kiona Morris','consectetuer@yahoo.ca',crypt('12345678', gen_salt('bf')),'Personal',1),
-  ('Leo Kelly','aliquam.nec@icloud.com',crypt('12345678', gen_salt('bf')),'Personal',2),
-  ('Shelley Ramsey','nunc@aol.couk',crypt('12345678', gen_salt('bf')),'Personal',3),
-  ('Hayfa Moss','fames.ac@hotmail.edu',crypt('12345678', gen_salt('bf')),'Personal',4),
-  ('Bruno Tate','eu.nibh@outlook.org',crypt('12345678', gen_salt('bf')),'Personal',5),
-  ('Brandon O''connor','quam.pellentesque@outlook.com',crypt('12345678', gen_salt('bf')),'Personal',6),
-  ('Leonard Goodman','semper.tellus@hotmail.com',crypt('12345678', gen_salt('bf')),'Personal',7),
-  ('Jade Pacheco','urna.vivamus@icloud.com',crypt('12345678', gen_salt('bf')),'Personal',8),
-  ('Trevor Weiss','amet@aol.edu',crypt('12345678', gen_salt('bf')),'Personal',9),
-  ('Giacomo Ramsey','quisque.ac.libero@yahoo.couk',crypt('12345678', gen_salt('bf')),'Personal',10);
+	('Admin','embol@gmail.com',crypt('12345678', gen_salt('bf')),'Administrador',1,'76627246');
+
+--select * from trabajos
+-- Actualizar el nombre de la área de trabajo con ID 1 a 'Nueva Área'
+/*UPDATE users
+SET celular = '76627246'
+WHERE id = 8;*/
 
 insert into users (name,email,password,rol,url,textcv,pathcv)
 values
@@ -283,7 +254,172 @@ Ingles
 Basico
 -
 Intermedio
-','cv/FaZbKfHZQn96NuS3IeWKQX0ryeAc3hXkG6rkFcCZ.pdf');
+','cv/FaZbKfHZQn96NuS3IeWKQX0ryeAc3hXkG6rkFcCZ.pdf'),
+('Elian Huanca','huancacori@gmail.com',crypt('12345678', gen_salt('bf')),'Postulante','https://sw-proyects.s3.amazonaws.com/cv/RROhhCG3OOUVryf4vfqw901Ifqo4kyHSujr90xVi.pdf','ELIAN RENE HUANCA CHOQUE
+Estudiante
+EXPERIENCIA LABORAL
+SOBRE MÍ
+COMERCIO ( VENTA DE TEXTILES)
+Estudiante de Ingeniería
+Nov 2022- Ago 2023
+de Sistemas.
+Vendedor, Atención al cliente.
+Buscando mi primera
+ESTUDIOS
+experiencia laboral, que
+me permita aplicar los
+UNIVERSIDAD AUTONOMA GABRIEL
+conocimientos
+RENE MORENO
+adquiridos en los años de
+2018 - actualidad.
+estudio
+Carrera de Ingeniería De Sistemas (9no semestre)
+COLEGIO BOLIVIANO AMERICANO
+Bachiller 2017
+CONTACTO
+CURSOS AUTOFINANCIADO DE
+IDIOMAS
++591 76627246
+2021 - actualidad.
+huancacori@gmail.com
+Ingles B1
+Barrio Lindo, C/
+Cabo Quiroga
+HABILIDADES
+github.com/ElianHuanca
+Lenguajes De Programación : Java, PHP, Javascript.
+Gestores De Base De Datos : MySQL, Postgres,
+SQL Server, MongoDB.
+Frameworks: Laravel, React Js, Node Js, Flutter.
+Control De Versiones: Git y GitHub
+Lenguaje De Marcado y Estilos : Html y Css
+ELIAN
+RENE
+HUANCA
+CHOQUE
+Estudiante
+EXPERIENCIA
+LABORAL
+SOBRE
+MÍ
+COMERCIO
+(
+VENTA
+DE
+TEXTILES)
+Estudiante
+de
+Ingeniería
+Nov
+2022-
+Ago
+2023
+de
+Sistemas.
+Vendedor,
+Atención
+al
+cliente.
+Buscando
+mi
+primera
+ESTUDIOS
+experiencia
+laboral,
+que
+me
+permita
+aplicar
+los
+UNIVERSIDAD
+AUTONOMA
+GABRIEL
+conocimientos
+RENE
+MORENO
+adquiridos
+en
+los
+años
+de
+2018
+-
+actualidad.
+estudio
+Carrera
+de
+Ingeniería
+De
+Sistemas
+(9no
+semestre)
+COLEGIO
+BOLIVIANO
+AMERICANO
+Bachiller
+2017
+CONTACTO
+CURSOS
+AUTOFINANCIADO
+DE
+IDIOMAS
++591 76627246
+2021
+-
+actualidad.
+huancacori@gmail.com
+Ingles
+B1
+Barrio
+Lindo,
+C/
+Cabo
+Quiroga
+HABILIDADES
+github.com/ElianHuanca
+Lenguajes
+De
+Programación
+:
+Java,
+PHP,
+Javascript.
+Gestores
+De
+Base
+De
+Datos
+:
+MySQL,
+Postgres,
+SQL
+Server,
+MongoDB.
+Frameworks:
+Laravel,
+React
+Js,
+Node
+Js,
+Flutter.
+Control
+De
+Versiones:
+Git
+y
+GitHub
+Lenguaje
+De
+Marcado
+y
+Estilos
+:
+Html
+y
+Css
+','cv/RROhhCG3OOUVryf4vfqw901Ifqo4kyHSujr90xVi.pdf');
+
 
 CREATE OR REPLACE FUNCTION agregarCelular()
 RETURNS VOID AS $$
@@ -302,29 +438,11 @@ END;
 $$ LANGUAGE plpgsql;
 SELECT agregarCelular();
 
-
-CREATE OR REPLACE FUNCTION randomCategoria()
-RETURNS VARCHAR(100) AS $$
-declare num INT;
-categorias VARCHAR[] := ARRAY['Ingenieria', 
-'Tecnologia De La Informacion',
-'Finanzas y Contabilidad',
-'Ventas y Marketing',
-'Manufactura y Produccion',
-'Logistica y Transporte'
-];
-begin 
-	num:=(SELECT floor(random() * 6) + 1 );
-	return categorias[num]; 
-end;
-$$ LANGUAGE plpgsql;
---SELECT randomCategoria();
-
 CREATE OR REPLACE FUNCTION randomCargo(categoria varchar(100))
 RETURNS VARCHAR(100) AS $$
 DECLARE 
     num INT;
-    ingenieria VARCHAR[] := ARRAY['Ingenieria electrica','Ingenieria mecanica','Ingeniería civil'];
+    ingenieria VARCHAR[] := ARRAY['Ingenieria electrica','Ingenieria mecanica','Ingenieria civil'];
     tecnologia VARCHAR[] := ARRAY['Desarrollador de software','Administrador de sistemas','Analista de datos'];
     finanzas VARCHAR[] := ARRAY['Contador','Analista financiero','Auditor'];
     ventas VARCHAR[] := ARRAY['Representante de ventas','Gerente de marketing','Especialista en relaciones publicas'];
@@ -464,27 +582,25 @@ $$ LANGUAGE plpgsql;
 CREATE OR REPLACE FUNCTION insertarTrabajosDisponibles()
 RETURNS VOID AS $$
 DECLARE 
-    idempresas INT;responsabilidades text[];requisitos text[];idsucursales INT;categoria VARCHAR(50);cargo VARCHAR(50);salario FLOAT;vacancia INT; veces INT;fecha DATE;fechafin DATE;
+    idusers INT;idareas INT;responsabilidades text[];requisitos text[];idsucursales INT;categoria VARCHAR(50);cargo VARCHAR(50);salario FLOAT;vacancias INT; veces INT;fecha DATE;fechafin DATE;
 begin
-	idempresas:=(select count(*) from empresas);
-	while (idempresas>0) LOOP
-		veces:=(SELECT floor(random() * (100 - 70 )+70));
-		while (veces>0) LOOP
-			categoria:=(SELECT randomCategoria());
-			cargo:=(SELECT  randomCargo(categoria));
-			idsucursales:=(SELECT id FROM sucursales where sucursales.idempresa=idempresa ORDER BY random() LIMIT 1);
-			responsabilidades:=(SELECT responsabilidades(categoria,cargo));
-			requisitos:=(SELECT requisitos(categoria,cargo));
-			salario:=(SELECT floor(random() * (7000 - 2000 )+2000));
-			vacancia:=(SELECT floor(random() * 3) + 1 );
-			fecha:=(SELECT fecha_aleatoria FROM generate_series('2023-11-20'::date, '2023-12-07'::date, '1 day') AS fecha_aleatoria ORDER BY random() LIMIT 1);
-			fechafin:=(SELECT fecha_aleatoria FROM generate_series('2023-12-07'::date, '2023-12-31'::date, '1 day') AS fecha_aleatoria ORDER BY random() LIMIT 1);								
-			insert into trabajos(cargo, responsabilidades, requisitos, salario, vacancia, fecha,fechaFin, categoria,idempresa, idsucursal) 
-			values(cargo,responsabilidades,requisitos,salario,vacancia,fecha,fechafin,categoria,idempresas,idsucursales);									
-			veces:=veces-1;
-		end loop;
-		idempresas:=idempresas-1;
-	end loop;
+	veces:=(SELECT floor(random() * (50 - 40 )+40));
+	while (veces>0) LOOP
+		categoria:= (SELECT nombre FROM areas ORDER BY random() LIMIT 1);
+		idareas:= (select id from areas where nombre=categoria);
+		cargo:=(SELECT  randomCargo(categoria));
+		idusers:=(SELECT id FROM users where rol='Personal' ORDER BY random() LIMIT 1);
+		idsucursales:=(SELECT id FROM sucursales ORDER BY random() LIMIT 1);
+		responsabilidades:=(SELECT responsabilidades(categoria,cargo));
+		requisitos:=(SELECT requisitos(categoria,cargo));
+		salario:=(SELECT floor(random() * (7000 - 2000 )+2000));
+		vacancias:=(SELECT floor(random() * 3) + 1 );
+		fecha:=(SELECT fecha_aleatoria FROM generate_series('2023-11-20'::date, '2023-12-07'::date, '1 day') AS fecha_aleatoria ORDER BY random() LIMIT 1);
+		fechafin:=(SELECT fecha_aleatoria FROM generate_series('2023-12-10'::date, '2023-12-31'::date, '1 day') AS fecha_aleatoria ORDER BY random() LIMIT 1);								
+		insert into trabajos(cargo, responsabilidades, requisitos, salario, vacancia, fecha,fechaFin, idarea,iduser, idsucursal) 
+		values(cargo,responsabilidades,requisitos,salario,vacancias,fecha,fechafin,idareas,idusers,idsucursales);									
+		veces:=veces-1;
+	end loop;		
 end;
 $$ LANGUAGE plpgsql;
 SELECT insertarTrabajosDisponibles();
@@ -492,26 +608,23 @@ SELECT insertarTrabajosDisponibles();
 CREATE OR REPLACE FUNCTION insertarTrabajosFinalizados()
 RETURNS VOID AS $$
 DECLARE 
-    idempresas INT;responsabilidades text[];requisitos text[];idsucursales INT;categoria VARCHAR(50);cargo VARCHAR(50);salario FLOAT; veces INT;fecha DATE;fechafin DATE;
+    idusers INT;idareas INT;responsabilidades text[];requisitos text[];idsucursales INT;categoria VARCHAR(50);cargo VARCHAR(50);salario FLOAT; veces INT;fecha DATE;fechafin DATE;
 begin
-	idempresas:=(select count(*) from empresas);
-	while (idempresas>0) LOOP
-		veces:=(SELECT floor(random() * (100 - 70 )+70));
-		while (veces>0) LOOP
-			categoria:=(SELECT randomCategoria());
-			cargo:=(SELECT  randomCargo(categoria));
-			idsucursales:=(SELECT id FROM sucursales where sucursales.idempresa=idempresa ORDER BY random() LIMIT 1);
-			responsabilidades:=(SELECT responsabilidades(categoria,cargo));
-			requisitos:=(SELECT requisitos(categoria,cargo));
-			salario:=(SELECT floor(random() * (7000 - 2000 )+2000));
-			--vacancia:=(SELECT floor(random() * 3) + 1 );
-			fecha:=(SELECT fecha_aleatoria FROM generate_series('2023-09-01'::date, '2023-10-31'::date, '1 day') AS fecha_aleatoria ORDER BY random() LIMIT 1);
-			fechafin:=(SELECT fecha_aleatoria FROM generate_series('2023-11-01'::date, '2023-12-07'::date, '1 day') AS fecha_aleatoria ORDER BY random() LIMIT 1);								
-			insert into trabajos(cargo, responsabilidades, requisitos, salario, vacancia, fecha,fechaFin, categoria,idempresa, idsucursal,estado) 
-			values(cargo,responsabilidades,requisitos,salario,0,fecha,fechafin,categoria,idempresas,idsucursales,false);									
-			veces:=veces-1;
-		end loop;
-		idempresas:=idempresas-1;
+	veces:=(SELECT floor(random() * (50 - 40 )+40));
+	while (veces>0) LOOP
+		categoria:= (SELECT nombre FROM areas ORDER BY random() LIMIT 1);--(SELECT randomCategoria());
+		idareas:= (select id from areas where nombre=categoria);
+		idusers:=(SELECT id FROM users where rol='Personal' ORDER BY random() LIMIT 1);
+		cargo:=(SELECT  randomCargo(categoria));
+		idsucursales:=(SELECT id FROM sucursales ORDER BY random() LIMIT 1);
+		responsabilidades:=(SELECT responsabilidades(categoria,cargo));
+		requisitos:=(SELECT requisitos(categoria,cargo));
+		salario:=(SELECT floor(random() * (7000 - 2000 )+2000));
+		fecha:=(SELECT fecha_aleatoria FROM generate_series('2023-10-01'::date, '2023-11-15'::date, '1 day') AS fecha_aleatoria ORDER BY random() LIMIT 1);
+		fechafin:=(SELECT fecha_aleatoria FROM generate_series('2023-11-17'::date, '2023-12-05'::date, '1 day') AS fecha_aleatoria ORDER BY random() LIMIT 1);								
+		insert into trabajos(cargo, responsabilidades, requisitos, salario, vacancia, fecha,fechaFin, idarea,iduser, idsucursal,estado) 
+		values(cargo,responsabilidades,requisitos,salario,0,fecha,fechafin,idareas,idusers,idsucursales,false);									
+		veces:=veces-1;
 	end loop;
 end;
 $$ LANGUAGE plpgsql;
@@ -524,7 +637,19 @@ WHERE t.idempresa = 1  -- Reemplaza 1 con el ID de la empresa específica
 GROUP BY s.ciudad,t.estado
 order by s.ciudad;
 
+SELECT
+    areas.nombre AS area,
+    COUNT(trabajos.id) AS cantidad_de_trabajos
+FROM
+    trabajos
+JOIN
+    areas ON trabajos.idarea = areas.id
+WHERE
+    trabajos.estado = true
+GROUP BY
+    areas.id, areas.nombre;
 
+delete from postulaciones 
 
 SELECT * FROM empresas
 SELECT * FROM sucursales
