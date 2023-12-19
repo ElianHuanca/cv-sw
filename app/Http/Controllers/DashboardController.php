@@ -14,15 +14,20 @@ class DashboardController extends Controller
     public function index()
     {
         $cantTrabXCiu = DB::table('sucursales')
-        ->join('trabajos', 'sucursales.id', '=', 'trabajos.idsucursal')
-        //->where('trabajos.idempresa', 1)  // Reemplaza 1 con el ID de la empresa específica
-        //->where('trabajos.estado', true)
+        ->join('trabajos', 'sucursales.id', '=', 'trabajos.idsucursal')        
         ->groupBy('sucursales.ciudad','trabajos.estado')
         ->orderBy('sucursales.ciudad')
         ->select('sucursales.ciudad','trabajos.estado', DB::raw('COUNT(trabajos.id) as cantidad_trabajos'))
         ->get();
-        //dd($cantTrabXCiu);
-        return view('dashboard', compact('cantTrabXCiu'));
+        
+        $trabajosPorArea = DB::table('trabajos')
+            ->join('areas', 'trabajos.idarea', '=', 'areas.id')
+            ->select('areas.nombre as area', DB::raw('COUNT(trabajos.id) as cantidad_de_trabajos'))
+            ->where('trabajos.estado', '=', true)
+            ->groupBy('areas.id', 'areas.nombre')
+            ->get();
+
+        return view('dashboard', compact('cantTrabXCiu','trabajosPorArea'));
     }
 
     /**

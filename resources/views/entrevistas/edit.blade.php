@@ -12,8 +12,9 @@
                     </div>
                 </div>
                 <div class="card-body px-4 pt-2 pb-2">
-                    <form action="{{ route('entrevistas.update') }}" method="post">
-                        @csrf
+                    <form action="{{ route('entrevistas.update',$entrevista->id) }}" method="POST">                        
+                        @csrf   
+                        @method('PUT')                     
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -50,7 +51,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="estado" class="form-control-label">Contratado:</label>
-                                    <input type="checkbox" name="estado" value="1">
+                                    <input type="checkbox" class="form-control-checkbox" name="estado" value="1">
                                     <span class="ml-2">Contratado</span>
                                     @error('estado')
                                         <p class="text-danger text-xs mt-2">{{ $message }}</p>
@@ -62,7 +63,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="resultado" class="form-control-label">Conclusion:</label>
-                                    <input type="text" class="form-control" name='postulante'
+                                    <input type="text" class="form-control" name='resultado'
                                         value="{{ old('resultado') }}" required>
                                     @error('resultado')
                                         <p class="text-danger text-xs mt-2">{{ $message }}</p>

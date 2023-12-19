@@ -2,18 +2,25 @@
 
 @section('content')
     <div class="text-center">
-        <h2>Cantidad De Trabajos Segun Su Estado En Base A La Empresa</h2>
+        <h3>Cantidad De Trabajos Segun Su Estado En Base A La Empresa</h3>
         <div id="chart_div" style="width: 100%; height: 600px;"></div>
+    </div>
+    <div class="mt-4 text-center">
+        <h3>Cantidad De Trabajos Habilitados Por Area</h3>
+        <div id="chart_div2" style="width: 100%; height: 600px;"></div>
     </div>
 @endsection
 @push('dashboard')
     <script type='text/javascript' src='https://www.gstatic.com/charts/loader.js'></script>
     <script type='text/javascript'>
         google.charts.load('current', {
-            'packages': ['geochart'],
+            'packages': ['geochart', 'corechart'],
             'mapsApiKey': 'AIzaSyA7OuuczmOUALvosZeUooXv421gnVX1zzI'
         });
-        google.charts.setOnLoadCallback(drawMarkersMap);
+        google.charts.setOnLoadCallback(function() { // Anonymous function that calls drawChart1 and drawChart2
+            drawMarkersMap();
+            drawChart();            
+        });
 
         function drawMarkersMap() {
             /* var data = google.visualization.arrayToDataTable([
@@ -75,5 +82,35 @@
             var chart = new google.visualization.GeoChart(document.getElementById('chart_div'));
             chart.draw(data, options);
         };
+
+        function drawChart() {
+
+            /* var data = google.visualization.arrayToDataTable([
+                ['Task', 'Hours per Day'],
+                ['Work', 11],
+                ['Eat', 2],
+                ['Commute', 2],
+                ['Watch TV', 2],
+                ['Sleep', 7]
+            ]); */
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Nombre');
+            data.addColumn('number', 'Cantidad');
+
+            // Agrega las filas de datos desde la variable de Blade
+            data.addRows([
+                @foreach ($trabajosPorArea as $resultado)
+                    ['{{ $resultado->area }}', {{ $resultado->cantidad_de_trabajos }}],
+                @endforeach
+            ]);
+
+            var options = {
+                title: 'Cantidad De Trabajos Habilitados Por Area'
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('chart_div2'));
+
+            chart.draw(data, options);
+        }
     </script>
 @endpush

@@ -73,6 +73,7 @@ class EntrevistasController extends Controller
      */
     public function edit(string $id)
     {
+        //dd($id);
         $entrevista = Entrevistas::find($id);
         return view('entrevistas.edit', compact('entrevista'));
     }
@@ -80,19 +81,21 @@ class EntrevistasController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request,$id)
     {
+        //dd($request->all());
         $entrevista = Entrevistas::find($id);
         $entrevista->update(
             [
                 'resultado' => $request->resultado,
-                'estado' => $request->estado,
+                'estado' => $request->estado == "1" ? true : false,
             ]
         );
 
-        if($request->estado == 'Aceptado'){
-            $entrevista->postulacion->trabajo->vacante = -1;
-            if($entrevista->postulacion->trabajo->vacante == 0){
+        if($entrevista->estado){
+            $vacancia = $entrevista->postulacion->trabajo->vacancia;
+            $vacancia = $vacancia -1;
+            if($vacancia == 0){
                 $entrevista->postulacion->trabajo->estado = false;
             }
             $entrevista->postulacion->trabajo->save();

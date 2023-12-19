@@ -40,11 +40,11 @@
                                         class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                         motivo
                                     </th>
-                                    @if (Auth::user()->rol == 'Personal')                                        
-                                    <th
-                                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                        Acciones
-                                    </th>
+                                    @if (Auth::user()->rol == 'Personal')
+                                        <th
+                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Acciones
+                                        </th>
                                     @endif
                                 </tr>
                             </thead>
@@ -55,17 +55,19 @@
                                             <p class="text-xs font-weight-bold mb-0">{{ $entrevista->admin->name}}</p>
                                         </td> --}}
                                         <td class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">{{ $entrevista->postulacion->usuario->name}}</p>
+                                            <p class="text-xs font-weight-bold mb-0">
+                                                {{ $entrevista->postulacion->usuario->name }}</p>
                                         </td>
                                         <td class="text-center">
-                                            <p class="text-xs font-weight-bold mb-0">{{ $entrevista->fecha}}</p>
+                                            <p class="text-xs font-weight-bold mb-0">{{ $entrevista->fecha }}</p>
                                         </td>
                                         <td class="text-center">
                                             <p class="text-xs font-weight-bold mb-0">{{ $entrevista->hora }}</p>
                                         </td>
                                         <td class="text-center">
                                             @if (!$entrevista->resultado)
-                                                <p class="text-xs font-weight-bold mb-0" style="color:orange">Sin Entrevistar
+                                                <p class="text-xs font-weight-bold mb-0" style="color:orange">Sin
+                                                    Entrevistar
                                                 </p>
                                             @elseif($entrevista->estado == true)
                                                 <p class="text-xs font-weight-bold mb-0" style="color:green">Contratado</p>
@@ -78,16 +80,18 @@
                                                 <p class="text-xs font-weight-bold mb-0">
                                                     {{ $entrevista->resultado }}</p>
                                             @else
-                                                <p class="text-xs font-weight-bold mb-0" style="color:orange">Todavia No Se Realizo La Entrevista</p>
+                                                <p class="text-xs font-weight-bold mb-0" style="color:orange">Todavia No Se
+                                                    Realizo La Entrevista</p>
                                             @endif
                                         </td>
                                         @if (!$entrevista->resultado && Auth::user()->rol == 'Personal')
-                                        <td class="text-center d-flex justify-content-center">
-                                            <a href="{{ route('entrevistas.edit', $entrevista->id) }}" class="mx-3"
-                                                data-bs-toggle="tooltip" data-bs-original-title="Dar Un Resultado">
-                                                <i class="fas fa-user-edit text-secondary"></i>
-                                            </a>
-                                        </td>
+                                            <td class="text-center d-flex justify-content-center">
+                                                <a href="{{ route('entrevistas.edit', ['id' => $entrevista->id]) }}"
+                                                    class="mx-3" data-bs-toggle="tooltip"
+                                                    data-bs-original-title="Dar Un Resultado">
+                                                    <i class="fas fa-user-edit text-secondary"></i>
+                                                </a>
+                                            </td>
                                         @endif
                                     </tr>
                                 @endforeach
